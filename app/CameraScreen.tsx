@@ -244,15 +244,15 @@ const CameraScreen = () => {
             paddingHorizontal: moderateScale(20),
           }}
         >
-          <Link href='/History'>
-            <TouchableOpacity
+          <Link href='/'>
+            <View
               style={[
                 styles.flash,
                 { backgroundColor:  Colors.primary},
               ]}
             >
               <FontAwesome6 name={"xmark"} size={28} color="white" />
-              </TouchableOpacity>
+              </View>
           </Link>
           <TouchableOpacity
             onPress={() => setFlash(!flash)}
