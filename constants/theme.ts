@@ -28,6 +28,7 @@ export const Colors = {
   lightGray: "#ccc",
   lightBlue: "#90d5ff",
   offWhite: "#f2f2f2",
+  electric:"#7df9ff"
 };
 
 export const Sizes = {

@@ -6,16 +6,19 @@ import {
   Alert,
   Modal,
   TouchableOpacity,
+  Animated,Easing
 } from "react-native";
+import { Link } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { CameraView, Camera } from "expo-camera";
 import general from "@/constants/General";
-import { SCREEN_HEIGHT, SCREEN_WIDTH, Sizes } from "@/constants/Theme";
+import { SCREEN_HEIGHT, SCREEN_WIDTH, Sizes ,Colors} from "@/constants/Theme";
 import * as Linking from "expo-linking";
 import * as Haptics from "expo-haptics";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { moderateScale } from "react-native-size-matters";
-
+import Ionicon from '@expo/vector-icons/Ionicons'
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 const CameraScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [lastScannedData, setLastScannedData] = useState("");
@@ -23,15 +26,30 @@ const CameraScreen = () => {
   const [textModalVisible, setTextModalVisible] = useState(false);
   const [currentText, setCurrentText] = useState("");
 
+    const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.62;
+    const scanLineAnim = React.useRef(new Animated.Value(0)).current;
+    const [flash,setFlash] = useState(false);
+
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
+        scanLineAnim.setValue(0);
+        const loop = Animated.loop(
+          Animated.timing(scanLineAnim, {
+            toValue: 1,
+            duration: 1800,
+            easing: Easing.linear,
+            useNativeDriver: true,
+          })
+        );
+        loop.start();
+        return () => loop.stop();
     })();
   }, []);
 
   // to Save scan to history
-  const saveToHistory = async (scanData, type) => {
+  const saveToHistory = async (scanData: any, type: string) => {
     try {
       const newScan = {
         id: Date.now(),
@@ -50,12 +68,12 @@ const CameraScreen = () => {
     }
   };
 
-  const showTextModal = (text) => {
+  const showTextModal = (text: React.SetStateAction<string>) => {
     setCurrentText(text);
     setTextModalVisible(true);
   };
 
-  const showWifiConnection = (wifiData) => {
+  const showWifiConnection = (wifiData: any) => {
     Alert.alert(
       "WiFi Network Detected",
       "This app can't automatically connect to WiFi networks for security reasons. Please check your device settings.",
@@ -182,7 +200,6 @@ const CameraScreen = () => {
       </View>
     );
   }
-
   return (
     <View style={general.container}>
       <StatusBar hidden />
@@ -199,10 +216,55 @@ const CameraScreen = () => {
         <View style={general.overlay}></View>
         <View style={styles.middleRow}>
           <View style={styles.overlay} />
-          <View style={general.overlayCam}></View>
+
+          <View style={general.overlayCam}>
+            <Animated.View
+              style={[
+                styles.scanLine,
+                {
+                  transform: [
+                    {
+                      translateY: scanLineAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, SCAN_BOX_SIZE - 4],
+                      }),
+                    },
+                  ],
+                },
+              ]}
+            />
+          </View>
           <View style={styles.overlay} />
         </View>
+
         <View style={general.overlay}></View>
+        <View style={general.row}>
+          <Link href="./index.tsx">
+            <TouchableOpacity
+              style={[
+                styles.flash,
+                { backgroundColor: flash ? Colors.primary : "black", right: 0 },
+              ]}
+            >
+              <FontAwesome6 name={"xmark"} size={28} color="white" />
+            </TouchableOpacity>
+          </Link>
+
+          <TouchableOpacity
+            onPress={() => setFlash(!flash)}
+            style={[
+              styles.flash,
+              { backgroundColor: flash ? Colors.primary : "black" },
+            ]}
+          >
+            <Ionicon
+              name={flash ? "flashlight-outline" : "flashlight"}
+              size={28}
+              color="white"
+              onPress={() => setFlash(!flash)}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       {/* Text Modal */}
       <Modal
@@ -238,7 +300,7 @@ const styles = StyleSheet.create({
   overlay: {
     backgroundColor: "black",
     opacity: 0.5,
-    width: SCREEN_WIDTH * 0.17,
+    width: SCREEN_WIDTH * 0.18,
     height: SCREEN_HEIGHT * 0.4,
   },
   middleRow: {
@@ -291,4 +353,31 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: moderateScale(18),
   },
+  scanLine: {
+    position: "absolute",
+    left: 2,
+    right: 2,
+    height: 5,
+    backgroundColor:Colors.primary,
+    borderRadius: 1,
+    opacity: 0.95,
+  },
+  instruction: {
+    position: "absolute",
+    bottom: moderateScale(10),
+    color: "white",
+    fontSize: moderateScale(13),
+    backgroundColor: "transparent",
+    textAlign: "center",
+    paddingHorizontal: moderateScale(8),
+    opacity: 0.9,
+  },
+  flash:{
+              position: "absolute",
+              bottom: moderateScale(40),
+              right: moderateScale(20),
+              padding: moderateScale(10),
+              borderRadius: moderateScale(30),
+            }
+  
 });

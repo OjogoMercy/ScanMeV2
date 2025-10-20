@@ -33,8 +33,11 @@ const general = StyleSheet.create({
   overlayCam: {
     height: SCREEN_HEIGHT * 0.4,
     width: SCREEN_WIDTH * 0.7,
-    borderRadius: Sizes.h1,
+    // borderRadius: Sizes.h1,
     opacity: 0.5,
+    borderColor:'white',
+    borderWidth: 2,
+    flex:1,
   },
   button: {
     backgroundColor: Colors.primary,
