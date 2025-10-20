@@ -14,6 +14,7 @@ import general from "@/constants/General";
 import { useFocusEffect } from "@react-navigation/native";
 import { moderateScale } from "react-native-size-matters";
 import { Colors } from "@/constants/Theme";
+import Clipboard from 'expo-clipboard'
 
 interface ScanData {
   id: number;
@@ -25,8 +26,9 @@ interface ScanData {
 
 const History = () => {
   const [scanHistory, setScanHistory] = useState<ScanData[]>([]);
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [filteredData, setFilteredData] = useState<ScanData[]>([]);
 
-  // Load history when screen comes into focus
   useFocusEffect(
     React.useCallback(() => {
       loadScanHistory();
@@ -37,13 +39,24 @@ const History = () => {
     try {
       const history = await AsyncStorage.getItem("scanHistory");
       if (history) {
-        setScanHistory(JSON.parse(history));
+        const parsedHistory = JSON.parse(history);
+        setScanHistory(parsedHistory);
       }
     } catch (error) {
       console.log("Error loading history:", error);
       Alert.alert("Error", "Failed to load scan history");
     }
   };
+
+  // Filter data whenever scanHistory or activeFilter changes
+  useEffect(() => {
+    if (activeFilter === 'all') {
+      setFilteredData(scanHistory);
+    } else {
+      const filtered = scanHistory.filter((item) => item.type === activeFilter);
+      setFilteredData(filtered);
+    }
+  }, [activeFilter, scanHistory]);
 
   // Actions
   const deleteScan = async (id: number) => {
@@ -61,6 +74,7 @@ const History = () => {
   };
 
   const copyToClipboard = async (text: string) => {
+    Clipboard.setString(text);
     Alert.alert("Copied!", "Text copied to clipboard");
   };
 
@@ -68,6 +82,32 @@ const History = () => {
     const date = new Date(timestamp);
     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
   };
+
+  const categories = ['all', 'url', 'email', 'phone', 'text', 'wifi'];
+
+  const renderCategoryFilter = () => (
+    <View style={styles.categoryBar}>
+      {categories.map((cat) => (
+        <TouchableOpacity
+          key={cat}
+          style={[
+            styles.categoryButton,
+            activeFilter === cat && styles.activeButton,
+          ]}  
+          onPress={() => setActiveFilter(cat)}
+        >
+          <Text
+            style={[
+              styles.categoryText,
+              activeFilter === cat && styles.activeText,
+            ]}
+          >
+            {cat.toUpperCase()}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
 
   return (
     <View style={[general.container, { backgroundColor: Colors.sky }]}>
@@ -82,7 +122,7 @@ const History = () => {
         </View>
       ) : (
         <FlatList
-          data={scanHistory}
+          data={filteredData}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <View style={styles.historyItem}>
@@ -129,6 +169,7 @@ const History = () => {
           )}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.listContent}
+          ListHeaderComponent={renderCategoryFilter()}
         />
       )}
     </View>
@@ -199,9 +240,31 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(14),
     fontWeight: "500",
   },
-
   deleteText: {
     color: "#d32f2f",
     fontWeight: "500",
+  },
+  categoryBar: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginBottom: moderateScale(15),
+  },
+  categoryButton: {
+    paddingVertical: moderateScale(6),
+    paddingHorizontal: moderateScale(12),
+    borderRadius: moderateScale(20),
+    backgroundColor: "#e0e0e0",
+    marginRight: moderateScale(10),
+    marginBottom: moderateScale(10),
+  },
+  activeButton: {
+    backgroundColor: Colors.primary,
+  },
+  categoryText: {
+    fontSize: moderateScale(14),
+    color: "#333",
+  },
+  activeText: {
+    color: "#fff",
   },
 });

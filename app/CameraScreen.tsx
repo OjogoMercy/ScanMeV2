@@ -1,24 +1,25 @@
+import general from "@/constants/General";
+import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "@/constants/Theme";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import Ionicon from "@expo/vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Camera, CameraView } from "expo-camera";
+import * as Haptics from "expo-haptics";
+import * as Linking from "expo-linking";
+import { Link } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
+  Alert,
+  Animated,
+  Easing,
+  Modal,
   StatusBar,
   StyleSheet,
   Text,
-  View,
-  Alert,
-  Modal,
   TouchableOpacity,
-  Animated,Easing
+  View,
 } from "react-native";
-import { Link } from "expo-router";
-import React, { useEffect, useState } from "react";
-import { CameraView, Camera } from "expo-camera";
-import general from "@/constants/General";
-import { SCREEN_HEIGHT, SCREEN_WIDTH, Sizes ,Colors} from "@/constants/Theme";
-import * as Linking from "expo-linking";
-import * as Haptics from "expo-haptics";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { moderateScale } from "react-native-size-matters";
-import Ionicon from '@expo/vector-icons/Ionicons'
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 const CameraScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [lastScannedData, setLastScannedData] = useState("");
@@ -26,25 +27,24 @@ const CameraScreen = () => {
   const [textModalVisible, setTextModalVisible] = useState(false);
   const [currentText, setCurrentText] = useState("");
 
-    const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.62;
-    const scanLineAnim = React.useRef(new Animated.Value(0)).current;
-    const [flash,setFlash] = useState(false);
-
+  const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.62;
+  const scanLineAnim = React.useRef(new Animated.Value(0)).current;
+  const [flash, setFlash] = useState(false);
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
-        scanLineAnim.setValue(0);
-        const loop = Animated.loop(
-          Animated.timing(scanLineAnim, {
-            toValue: 1,
-            duration: 1800,
-            easing: Easing.linear,
-            useNativeDriver: true,
-          })
-        );
-        loop.start();
-        return () => loop.stop();
+      scanLineAnim.setValue(0);
+      const loop = Animated.loop(
+        Animated.timing(scanLineAnim, {
+          toValue: 1,
+          duration: 1800,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        })
+      );
+      loop.start();
+      return () => loop.stop();
     })();
   }, []);
 
@@ -67,12 +67,10 @@ const CameraScreen = () => {
       console.log("Error saving to history:", error);
     }
   };
-
   const showTextModal = (text: React.SetStateAction<string>) => {
     setCurrentText(text);
     setTextModalVisible(true);
   };
-
   const showWifiConnection = (wifiData: any) => {
     Alert.alert(
       "WiFi Network Detected",
@@ -80,7 +78,6 @@ const CameraScreen = () => {
       [{ text: "OK" }]
     );
   };
-
   const handleBarCodeScanned = async ({ data }) => {
     if (scanned || data === lastScannedData) return;
 
@@ -181,7 +178,6 @@ const CameraScreen = () => {
     setScanned(false);
     setLastScannedData("");
   };
-
   if (hasPermission === null) {
     return (
       <View style={general.container}>
@@ -206,7 +202,8 @@ const CameraScreen = () => {
       <CameraView
         style={StyleSheet.absoluteFillObject}
         facing="back"
-        onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+        enableTorch={flash}
+       onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
         barcodeScannerSettings={{
           barcodeTypes: ["qr", "ean13", "ean8", "code128", "pdf417"],
         }}
@@ -216,7 +213,6 @@ const CameraScreen = () => {
         <View style={general.overlay}></View>
         <View style={styles.middleRow}>
           <View style={styles.overlay} />
-
           <View style={general.overlayCam}>
             <Animated.View
               style={[
@@ -238,30 +234,37 @@ const CameraScreen = () => {
         </View>
 
         <View style={general.overlay}></View>
-        <View style={general.row}>
-          <Link href="./index.tsx">
+        <View
+          style={{
+            position: "absolute",
+            bottom: moderateScale(50),
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingHorizontal: moderateScale(20),
+          }}
+        >
+          <Link href='/History'>
             <TouchableOpacity
               style={[
                 styles.flash,
-                { backgroundColor: flash ? Colors.primary : "black", right: 0 },
+                { backgroundColor:  Colors.primary},
               ]}
             >
               <FontAwesome6 name={"xmark"} size={28} color="white" />
-            </TouchableOpacity>
+              </TouchableOpacity>
           </Link>
-
           <TouchableOpacity
             onPress={() => setFlash(!flash)}
             style={[
               styles.flash,
-              { backgroundColor: flash ? Colors.primary : "black" },
+              { backgroundColor: flash ? 'black' : Colors.primary   },
             ]}
           >
             <Ionicon
               name={flash ? "flashlight-outline" : "flashlight"}
               size={28}
               color="white"
-              onPress={() => setFlash(!flash)}
             />
           </TouchableOpacity>
         </View>
@@ -358,7 +361,7 @@ const styles = StyleSheet.create({
     left: 2,
     right: 2,
     height: 5,
-    backgroundColor:Colors.primary,
+    backgroundColor: Colors.primary,
     borderRadius: 1,
     opacity: 0.95,
   },
@@ -372,12 +375,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: moderateScale(8),
     opacity: 0.9,
   },
-  flash:{
-              position: "absolute",
-              bottom: moderateScale(40),
-              right: moderateScale(20),
-              padding: moderateScale(10),
-              borderRadius: moderateScale(30),
-            }
-  
+  flash: {
+    borderRadius: moderateScale(30),
+    height: moderateScale(50),
+    width: moderateScale(50),
+    justifyContent:'center',
+    alignItems:'center',
+  },
 });
