@@ -205,7 +205,7 @@ const CameraScreen = () => {
         enableTorch={flash}
        onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
         barcodeScannerSettings={{
-          barcodeTypes: ["qr", "ean13", "ean8", "code128", "pdf417"],
+          barcodeTypes: ["qr", "ean13", "ean8", "code128", "pdf417", "upc_e"],
         }}
       />
       {/* Overlay */}
