@@ -32,7 +32,7 @@ export default function Index() {
           resizeMode: "contain",
         }}
       />
-      <View style={[general.row, {width:'60%'}]}>
+      <View style={[ {width:'100%'}]}>
         <Link href={"/History"} style={general.button}>
           <Text style={general.buttonText}>History</Text>
         </Link>

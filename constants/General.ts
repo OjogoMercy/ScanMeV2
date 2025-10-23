@@ -43,9 +43,10 @@ const general = StyleSheet.create({
     backgroundColor: Colors.primary,
     paddingVertical: SCREEN_HEIGHT * 0.02,
     paddingHorizontal: SCREEN_WIDTH * 0.05,
-    borderRadius: SCREEN_WIDTH * 0.03,
+    borderRadius: SCREEN_WIDTH * 0.05,
     alignItems: "center",
     marginTop: SCREEN_HEIGHT * 0.02,
+    width:'90%'
   },
   buttonText: {
     color: Colors.white,
