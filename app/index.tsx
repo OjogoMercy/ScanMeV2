@@ -1,10 +1,9 @@
-import { StatusBar, Text, View ,Image, Pressable, TouchableOpacity} from "react-native";
-import React from 'react';
-import { Colors,Sizes,FONTS, SCREEN_HEIGHT, SCREEN_WIDTH } from "@/constants/Theme";
-import CustomButton from "@/components/CustomButton";
-import { Camera, useCameraPermissions, CameraType } from "expo-camera";  
-import { Link } from "expo-router";
 import general from "@/constants/General";
+import { Colors, FONTS, SCREEN_HEIGHT, SCREEN_WIDTH, Sizes } from "@/constants/Theme";
+import { useCameraPermissions } from "expo-camera";
+import { Link } from "expo-router";
+import React from 'react';
+import { Image, StatusBar, Text, View } from "react-native";
 
 export default function Index() {
   const [permission, requestPermissions] = useCameraPermissions();
@@ -19,7 +18,7 @@ export default function Index() {
       }}
     >
       <StatusBar barStyle="dark-content" backgroundColor={Colors.white} />
-      <Text style={{ ...FONTS.h2 }}>Hey There!</Text>
+      <Text style={{ ...FONTS.h1, color:Colors.primary }}>Hey There!</Text>
       <Text style={{ ...FONTS.body3a, textAlign: "center" }}>
         Your Files are not stable , they physically deteriorate overtime, Why
         not try to preserve them.

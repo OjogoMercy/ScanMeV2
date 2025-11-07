@@ -1,5 +1,5 @@
 import general from "@/constants/General";
-import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "@/constants/Theme";
+import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/theme";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Ionicon from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
