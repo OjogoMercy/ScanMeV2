@@ -14,7 +14,7 @@ import {
   View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors } from "../constants/theme";
+import { Colors, FONTS } from "../constants/theme";
 
 interface ScanData {
   id: number;
@@ -115,7 +115,7 @@ const History = () => {
       <Text style={styles.title}>Scan History</Text>
       {scanHistory.length === 0 ? (
         <View style={styles.emptyState}>
-          <Text>No scans yet</Text>
+          <Text style={{...FONTS.h3, fontWeight:'bold'}}>No scans yet</Text>
           <Text style={styles.emptySubtext}>
             Scan some QR codes to see them here!
           </Text>
