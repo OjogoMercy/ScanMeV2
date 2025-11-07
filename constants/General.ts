@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Colors,Sizes,FONTS,SCREEN_HEIGHT,SCREEN_WIDTH } from "./Theme";
+import { Colors, FONTS, SCREEN_HEIGHT, SCREEN_WIDTH } from "./theme";
 
 const general = StyleSheet.create({
   AuthContainer: {
@@ -43,14 +43,17 @@ const general = StyleSheet.create({
     backgroundColor: Colors.primary,
     paddingVertical: SCREEN_HEIGHT * 0.02,
     paddingHorizontal: SCREEN_WIDTH * 0.05,
-    borderRadius: SCREEN_WIDTH * 0.05,
+    borderRadius: SCREEN_WIDTH * 0.06,
     alignItems: "center",
     marginTop: SCREEN_HEIGHT * 0.02,
-    width:'90%'
+    width: '90%',
+    justifyContent: 'center',
+    alignSelf:'center'
   },
   buttonText: {
     color: Colors.white,
     fontWeight: "bold",
+    textAlign:'center'
   },
   input: {
     borderRadius: SCREEN_WIDTH * 0.02,
