@@ -1,20 +1,20 @@
+import general from "@/constants/General";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import Clipboard from 'expo-clipboard';
+import React, { useEffect, useState } from "react";
 import {
+  Alert,
   FlatList,
   Linking,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Alert,
-  StatusBar,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import general from "@/constants/General";
-import { useFocusEffect } from "@react-navigation/native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors } from "@/constants/Theme";
-import Clipboard from 'expo-clipboard'
+import { Colors } from "../constants/theme";
 
 interface ScanData {
   id: number;

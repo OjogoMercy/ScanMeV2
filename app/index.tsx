@@ -1,9 +1,9 @@
 import general from "@/constants/General";
-import { Colors, FONTS, SCREEN_HEIGHT, SCREEN_WIDTH, Sizes } from "@/constants/Theme";
 import { useCameraPermissions } from "expo-camera";
 import { Link } from "expo-router";
 import React from 'react';
 import { Image, StatusBar, Text, View } from "react-native";
+import { Colors, FONTS, SCREEN_HEIGHT, SCREEN_WIDTH, Sizes } from "../constants/theme";
 
 export default function Index() {
   const [permission, requestPermissions] = useCameraPermissions();
