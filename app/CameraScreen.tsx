@@ -198,7 +198,7 @@ const CameraScreen = () => {
   }
   return (
     <View style={general.container}>
-      <StatusBar hidden />
+      {/* <StatusBar hidden /> */}
       <CameraView
         style={StyleSheet.absoluteFillObject}
         facing="back"
