@@ -19,7 +19,7 @@ export default function Index() {
     >
       <StatusBar barStyle="dark-content" backgroundColor={"transparent"} translucent />
       <Text style={{ ...FONTS.h1, color:Colors.primary,fontWeight:'bold', marginTop:Sizes.base }}>Hey There!</Text>
-      <Text style={{ ...FONTS.body3a, textAlign: "center" }}>
+      <Text style={{ ...FONTS.body3a, textAlign: "center",color:Colors.primary2 }}>
         Your Files are not stable , they physically deteriorate overtime, Why
         not try to preserve them.
       </Text>
@@ -31,13 +31,14 @@ export default function Index() {
           resizeMode: "contain",
         }}
       />
-      <View style={[ {width:'100%'}]}>
+      <View style={[{ width: '100%' }]}>
+         <Link href="/CameraScreen" style={general.button}>
+          <Text style={general.buttonText}>Scan Me</Text>
+        </Link>
         <Link href={"/History"} style={general.button}>
           <Text style={general.buttonText}>History</Text>
         </Link>
-        <Link href="/CameraScreen" style={general.button}>
-          <Text style={general.buttonText}>Scan Me</Text>
-        </Link>
+       
       </View>
     </View>
   );

@@ -1,9 +1,8 @@
 import { images } from '@/assets/images'
-import React, { useEffect } from 'react'
-import { Animated, Image, StyleSheet, View } from 'react-native'
-import {BlurView, BlurViewProps} from 'expo-blur'
 import { Colors } from '@/constants/theme'
 import { useRouter } from 'expo-router'
+import React, { useEffect } from 'react'
+import { Animated, StatusBar, StyleSheet, View } from 'react-native'
 
 
 const Splash = () => {
@@ -31,6 +30,7 @@ const router = useRouter()
     },[router,fadeAnim])
   return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:Colors.primary }}>
+        <StatusBar barStyle='dark-content' backgroundColor={Colors.primary} />
           <Animated.Image source={images.Splash} style={{ height: '25%', width: '50%', opacity: imageOpacity, transform: [{ translateY: imageTransformY }] }} />
               
               
