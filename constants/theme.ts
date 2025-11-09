@@ -12,8 +12,8 @@ export const Colors = {
   white: "#ffffff",
   black: "#000",
   primary: "#4682B4",
-  primary2: "#40196D",
-  sky: "#F1FAF9",
+  primary2: "#46B4A3 ",
+  sky: "#6e94b8ff ",
   orange: "#ff7040",
   secondary: "#00caf2",
   green: "#47cc49",
@@ -28,7 +28,8 @@ export const Colors = {
   lightGray: "#ccc",
   lightBlue: "#90d5ff",
   offWhite: "#f2f2f2",
-  electric:"#7df9ff"
+  electric: "#7df9ff",
+  light:"#6A9BC8 "
 };
 
 export const Sizes = {
