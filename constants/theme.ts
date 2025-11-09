@@ -32,7 +32,8 @@ export const Colors = {
   offWhite: "#f2f2f2",
   electric: "#7df9ff",
   light: "#6A9BC8",
-  background:"#E8F0F8"
+  background: "#E8F0F8",
+  border:"#01050aff"
 };
 
 export const Sizes = {

@@ -91,7 +91,7 @@ const general = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: Colors.black,
+    borderColor: Colors.border,
     borderRadius: SCREEN_WIDTH * 0.02,
     paddingHorizontal: SCREEN_WIDTH * 0.03,
     backgroundColor: Colors.white,
