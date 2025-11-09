@@ -12,7 +12,9 @@ export const Colors = {
   white: "#ffffff",
   black: "#000",
   primary: "#4682B4",
-  primary2: "#46B4A3 ",
+  primary2:'#94b7daff',
+  accent: "#FF6F61",
+  teal: "#46B4A3",
   sky: "#6e94b8ff ",
   orange: "#ff7040",
   secondary: "#00caf2",
@@ -29,7 +31,8 @@ export const Colors = {
   lightBlue: "#90d5ff",
   offWhite: "#f2f2f2",
   electric: "#7df9ff",
-  light:"#6A9BC8 "
+  light: "#6A9BC8",
+  background:"#E8F0F8"
 };
 
 export const Sizes = {
