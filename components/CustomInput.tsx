@@ -8,14 +8,14 @@ import {
   ViewStyle,
   TouchableOpacity,
 } from "react-native";
-import { SCREEN_HEIGHT, SCREEN_WIDTH, Colors, Sizes } from '../constants/Theme'
+import { SCREEN_HEIGHT, SCREEN_WIDTH, Colors, Sizes } from '../constants/theme'
 import general from "../constants/General";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 type Props = {
   label?: string;
-  value: string;
+  value: (text: string) => void;
   onChangeText: (text: string) => void;
   placeholder?: string;
   secureTextEntry?: boolean;

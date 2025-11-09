@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import general from "../constants/General";
-import { Colors } from "../constants/Theme";
+import { Colors } from "../constants/theme";
 
 interface Props {
   title: string;

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View,TouchableOpacity } from 'react-native'
 import React from 'react'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Colors,FONTS,SCREEN_HEIGHT,SCREEN_WIDTH } from '../constants/Theme';
+import { Colors,FONTS,SCREEN_HEIGHT,SCREEN_WIDTH } from '../constants/theme';
 import { useNavigation } from 'expo-router';
 const CustomHeader = ({ title }) => {
   const navigation = useNavigation();
