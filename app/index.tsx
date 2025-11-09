@@ -13,7 +13,7 @@ export default function Index() {
       style={{
         flex: 1,
         alignItems: "center",
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.background,
         padding: Sizes.padding,
       }}
     >
