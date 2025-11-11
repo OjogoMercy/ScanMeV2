@@ -110,8 +110,8 @@ const History = () => {
   );
 
   return (
-    <View style={[general.container, { backgroundColor: Colors.sky }]}>
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.sky} />
+    <View style={[general.container, { backgroundColor: Colors.background }]}>
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
       <Text style={styles.title}>Scan History</Text>
       {scanHistory.length === 0 ? (
         <View style={styles.emptyState}>
