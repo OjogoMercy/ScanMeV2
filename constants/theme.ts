@@ -11,7 +11,7 @@ export const SCREEN_HEIGHT = height;
 export const Colors = {
   white: "#ffffff",
   black: "#000",
-  primary: "#4682B4",
+  primary: "rgba(70, 130, 180, 1)",
   primary2:'#94b7daff',
   accent: "#FF6F61",
   teal: "#46B4A3",
@@ -31,8 +31,8 @@ export const Colors = {
   lightBlue: "#90d5ff",
   offWhite: "#f2f2f2",
   electric: "#7df9ff",
-  light: "#6A9BC8",
-  background: "#E8F0F8",
+  light: "#6a9bc8ff",
+  background: 'rgba(232, 240, 248,0.7)',
   border:"#01050aff"
 };
 
