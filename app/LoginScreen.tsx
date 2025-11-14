@@ -1,11 +1,10 @@
+import CustomButton from '@/components/CustomButton'
 import CustomInput from '@/components/CustomInput'
 import general from '@/constants/General'
-import { BlurView } from 'expo-blur'
+import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import { Alert, KeyboardAvoidingView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { Colors, FONTS, Sizes } from '../constants/theme'
-import CustomButton from '@/components/CustomButton'
-import { useRouter } from 'expo-router'
 const LoginScreen = () => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -19,7 +18,8 @@ const LoginScreen = () => {
         } else if (password !== confirmPassword) {
             Alert.alert('Error', 'Passwords do not match')
             return
-    }else{router.push('/')}
+        } else { router.push('/') }
+        console.log(userData)
 }
     const userData = {
     name,
