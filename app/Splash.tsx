@@ -24,7 +24,7 @@ const router = useRouter()
         }).start();
         const timer = setTimeout(() => {
 
-            router.replace('./LoginScreen')
+            router.replace('/')
         },
             2000)
     },[router,fadeAnim])
