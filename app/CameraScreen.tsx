@@ -27,7 +27,7 @@ const CameraScreen = () => {
   const [textModalVisible, setTextModalVisible] = useState(false);
   const [currentText, setCurrentText] = useState("");
 
-  const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.62;
+  const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.7;
   const scanLineAnim = React.useRef(new Animated.Value(0)).current;
   const [flash, setFlash] = useState(false);
   useEffect(() => {
@@ -222,7 +222,7 @@ const CameraScreen = () => {
                     {
                       translateY: scanLineAnim.interpolate({
                         inputRange: [0, 1],
-                        outputRange: [0, SCAN_BOX_SIZE - 4],
+                        outputRange: [0, SCAN_BOX_SIZE - 2],
                       }),
                     },
                   ],
@@ -302,7 +302,6 @@ export default CameraScreen;
 const styles = StyleSheet.create({
   overlay: {
     backgroundColor:  "rgba(70, 130, 180, 0.12)" ,
-    opacity: 0.5,
     width: SCREEN_WIDTH * 0.18,
     height: SCREEN_HEIGHT * 0.4,
   },
@@ -361,9 +360,9 @@ const styles = StyleSheet.create({
     left: 2,
     right: 2,
     height: 5,
-    backgroundColor: Colors.primary,
+    backgroundColor: "rgba(70, 130, 180, 0.5)",
     borderRadius: 1,
-    opacity: 0.95,
+    elevation:5,
   },
   instruction: {
     position: "absolute",
