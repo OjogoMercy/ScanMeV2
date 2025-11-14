@@ -301,7 +301,7 @@ const CameraScreen = () => {
 export default CameraScreen;
 const styles = StyleSheet.create({
   overlay: {
-    backgroundColor: "black",
+    backgroundColor:  "rgba(70, 130, 180, 0.12)" ,
     opacity: 0.5,
     width: SCREEN_WIDTH * 0.18,
     height: SCREEN_HEIGHT * 0.4,

@@ -15,7 +15,8 @@ export const Colors = {
   primary2: '#94b7daff',
   text: '#1F3B55',
   secondaryText: '#2E3A45',
-  bodyText:'#5A6B7A',
+  bodyText: '#5A6B7A',
+  placeholder:'#7D8FA1',
   accent: "#FF6F61",
   teal: "#46B4A3",
   sky: "#6e94b8ff ",
@@ -77,7 +78,6 @@ export const Sizes = {
   intro: screenHeight * 0.04,
   tinyText: screenHeight * 0.012,
 
-  // app dimensions
   width,
   height,
 };
@@ -113,7 +113,6 @@ export const FONTS = {
     fontSize: Sizes.h5,
     lineHeight: screenHeight * 0.025,
   },
-  // BODY
 
   body: {
     fontFamily: "Montserrat-Medium",
