@@ -18,8 +18,8 @@ export default function Index() {
       }}
     >
       <StatusBar barStyle="dark-content" backgroundColor={"transparent"} translucent />
-      <Text style={{ ...FONTS.h1, color:Colors.primary,fontWeight:'bold', marginTop:Sizes.base }}>Hey There!</Text>
-      <Text style={{ ...FONTS.body3a, textAlign: "center",color:Colors.primary2 }}>
+      <Text style={{ ...FONTS.h1, color:Colors.text,fontWeight:'bold', marginTop:Sizes.base }}>Hey There!</Text>
+      <Text style={{ ...FONTS.body3a, textAlign: "center",color:Colors.bodyText }}>
         Your Files are not stable , they physically deteriorate overtime, Why
         not try to preserve them.
       </Text>
