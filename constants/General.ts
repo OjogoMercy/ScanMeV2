@@ -33,10 +33,9 @@ const general = StyleSheet.create({
     height: SCREEN_HEIGHT * 0.4,
     width: SCREEN_WIDTH * 0.7,
     opacity: 0.5,
- borderColor: 'rgba(70,130,180,0.15)',
+ borderColor: 'rgba(70,130,180,0.45)',
 borderWidth: 2,
     flex: 1,
-    elevation: 5,
   },
   button: {
     backgroundColor: Colors.primary,

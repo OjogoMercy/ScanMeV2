@@ -360,9 +360,8 @@ const styles = StyleSheet.create({
     left: 2,
     right: 2,
     height: 5,
-    backgroundColor: "rgba(70, 130, 180, 0.5)",
+    backgroundColor: "rgba(52, 125, 185, 1)",
     borderRadius: 1,
-    elevation:5,
   },
   instruction: {
     position: "absolute",
