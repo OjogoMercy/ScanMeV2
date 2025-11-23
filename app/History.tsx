@@ -17,6 +17,7 @@ import { moderateScale } from "react-native-size-matters";
 import { Colors, FONTS, Sizes } from "../constants/theme";
 import { MotiView, MotiText } from 'moti';
 import { opacity } from "react-native-reanimated/lib/typescript/Colors";
+import Index from ".";
 
 interface ScanData {
   id: number;
@@ -96,7 +97,7 @@ const History = () => {
       animate={{ translateY: 0, opacity:1 }}
       transition={{
         type: 'timing',
-        duration:1700
+        duration:1000
       }}
     >
       {categories.map((cat) => (
@@ -136,15 +137,18 @@ const History = () => {
         <FlatList
           data={filteredData}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
+          renderItem={({ item ,index}) => (
             <MotiView style={styles.historyItem}
-              from={{opacity:0.1, translateY:100}}
+              key={item.id}
+              from={{opacity:0, translateY:100}}
               animate={{ opacity:1, translateY: 0 }}
               transition={{
                 type:"timing",
-                duration:1000
+                duration: 1000,
+                delay: index * 100,
+                // easing:'ease-in'
+
               }}
-              
             >
               <View style={styles.itemHeader}>
                 <Text style={styles.typeText}>{item.type.toUpperCase()}</Text>
