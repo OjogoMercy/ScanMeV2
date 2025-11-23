@@ -97,7 +97,7 @@ const History = () => {
       animate={{ translateY: 0, opacity:1 }}
       transition={{
         type: 'timing',
-        duration:1000
+        duration:800
       }}
     >
       {categories.map((cat) => (
