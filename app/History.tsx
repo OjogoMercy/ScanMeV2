@@ -15,7 +15,8 @@ import {
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { Colors, FONTS, Sizes } from "../constants/theme";
-import { Platform, LayoutAnimation, UIManager } from "react-native";
+import { MotiView, MotiText } from 'moti';
+import { opacity } from "react-native-reanimated/lib/typescript/Colors";
 
 interface ScanData {
   id: number;
@@ -35,11 +36,7 @@ const History = () => {
       loadScanHistory();
     }, [])
   );
-  if (Platform.OS === "android") {
-    if (UIManager.setLayoutAnimationEnabledExperimental) {
-      UIManager.setLayoutAnimationEnabledExperimental(true);
-    }
-  }
+
 
   const loadScanHistory = async () => {
     try {
@@ -66,7 +63,6 @@ const History = () => {
 
   // Actions
   const deleteScan = async (id: number) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const updatedHistory = scanHistory.filter((item) => item.id !== id);
     setScanHistory(updatedHistory);
     await AsyncStorage.setItem("scanHistory", JSON.stringify(updatedHistory));
@@ -93,8 +89,16 @@ const History = () => {
 
   const categories = ['all', 'url', 'email', 'phone', 'text', 'wifi'];
 
+
   const renderCategoryFilter = () => (
-    <View style={styles.categoryBar}>
+    <MotiView style={styles.categoryBar}
+      from={{ translateY: 100 , opacity:0.1}}
+      animate={{ translateY: 0, opacity:1 }}
+      transition={{
+        type: 'timing',
+        duration:1700
+      }}
+    >
       {categories.map((cat) => (
         <TouchableOpacity
           key={cat}
@@ -114,7 +118,7 @@ const History = () => {
           </Text>
         </TouchableOpacity>
       ))}
-    </View>
+    </MotiView>
   );
 
   return (
@@ -133,7 +137,15 @@ const History = () => {
           data={filteredData}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
-            <View style={styles.historyItem}>
+            <MotiView style={styles.historyItem}
+              from={{opacity:0.1, translateY:100}}
+              animate={{ opacity:1, translateY: 0 }}
+              transition={{
+                type:"timing",
+                duration:1000
+              }}
+              
+            >
               <View style={styles.itemHeader}>
                 <Text style={styles.typeText}>{item.type.toUpperCase()}</Text>
                 <Text style={styles.dateText}>
@@ -173,7 +185,7 @@ const History = () => {
                   <Text style={styles.deleteText}>Delete</Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </MotiView>
           )}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.listContent}
