@@ -1,7 +1,7 @@
 import general from "@/constants/General";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import Clipboard from 'expo-clipboard';
+import * as Clipboard from 'expo-clipboard';
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -15,6 +15,7 @@ import {
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { Colors, FONTS, Sizes } from "../constants/theme";
+import { Platform, LayoutAnimation, UIManager } from "react-native";
 
 interface ScanData {
   id: number;
@@ -34,6 +35,11 @@ const History = () => {
       loadScanHistory();
     }, [])
   );
+  if (Platform.OS === "android") {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
 
   const loadScanHistory = async () => {
     try {
@@ -60,10 +66,12 @@ const History = () => {
 
   // Actions
   const deleteScan = async (id: number) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     const updatedHistory = scanHistory.filter((item) => item.id !== id);
     setScanHistory(updatedHistory);
     await AsyncStorage.setItem("scanHistory", JSON.stringify(updatedHistory));
   };
+
 
   const favoriteScan = async (id: number) => {
     const updatedHistory = scanHistory.map((item) =>
@@ -154,7 +162,7 @@ const History = () => {
                   style={styles.actionButton}
                   onPress={() => favoriteScan(item.id)}
                 >
-                  <Text style={styles.actionText}>
+                  <Text style={[styles.actionText, {color:Colors.accent}]}>
                     {item.favorite ? "★" : "☆"}
                   </Text>
                 </TouchableOpacity>
