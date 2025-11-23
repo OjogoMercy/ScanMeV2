@@ -14,7 +14,7 @@ import {
   View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors, FONTS } from "../constants/theme";
+import { Colors, FONTS, Sizes } from "../constants/theme";
 
 interface ScanData {
   id: number;
@@ -74,7 +74,7 @@ const History = () => {
   };
 
   const copyToClipboard = async (text: string) => {
-    Clipboard.setString(text);
+    Clipboard.setStringAsync(text);
     Alert.alert("Copied!", "Text copied to clipboard");
   };
 
@@ -110,7 +110,7 @@ const History = () => {
   );
 
   return (
-    <View style={[general.container, { backgroundColor: Colors.background }]}>
+    <View style={[general.container, { backgroundColor: Colors.background , marginTop:Sizes.bigRadius}]}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
       <Text style={styles.title}>Scan History</Text>
       {scanHistory.length === 0 ? (
