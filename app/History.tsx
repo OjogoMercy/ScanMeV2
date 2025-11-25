@@ -93,11 +93,11 @@ const History = () => {
 
   const renderCategoryFilter = () => (
     <MotiView style={styles.categoryBar}
-      from={{ translateY: 100 , opacity:0.1}}
+      from={{ translateY: 100 , opacity:0}}
       animate={{ translateY: 0, opacity:1 }}
       transition={{
         type: 'timing',
-        duration:800
+        duration:700
       }}
     >
       {categories.map((cat) => (
