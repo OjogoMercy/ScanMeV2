@@ -2,8 +2,8 @@ import { images } from '@/assets/images'
 import { Colors } from '@/constants/theme'
 import { useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
-import { Animated, StatusBar, StyleSheet, View } from 'react-native'
-
+import { Animated, StatusBar, StyleSheet, View ,Image} from 'react-native'
+import { MotiView } from 'moti'
 
 const Splash = () => {
     const fadeAnim = new Animated.Value(0)
@@ -24,14 +24,26 @@ const router = useRouter()
         }).start();
         const timer = setTimeout(() => {
 
-            router.replace('/')
+            // router.replace('/')
         },
-            2000)
+            1500)
     },[router,fadeAnim])
   return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:Colors.primary }}>
-        <StatusBar barStyle='dark-content' backgroundColor={Colors.primary} />
-          <Animated.Image source={images.Splash} style={{ height: '25%', width: '50%', opacity: imageOpacity, transform: [{ translateY: imageTransformY }] }} />
+          <StatusBar barStyle='dark-content' backgroundColor={Colors.primary} />
+          <MotiView
+              from={{ opacity: 0, translateY: -100 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{
+                  type: "spring",
+                  damping: 15,
+                  stiffness:150
+              }}
+              
+          >
+          <Image source={images.Splash} style={{ height: '26%', width: '40%' }} />
+              
+          </MotiView>
               
               
     </View>
