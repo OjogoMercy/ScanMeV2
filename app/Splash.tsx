@@ -11,7 +11,7 @@ const router = useRouter()
        
         const timer = setTimeout(() => {
 
-            router.replace('/')
+            router.replace('/(tabs)')
         },
             2000)
         return () => clearTimeout(timer)

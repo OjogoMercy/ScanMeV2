@@ -24,22 +24,14 @@ export default function Index() {
         not try to preserve them.
       </Text>
       <Image
-        source={require("../assets/images/man.jpg")}
+        source={require("../../assets/images/man.jpg")}
         style={{
           height: SCREEN_HEIGHT * 0.6,
           width: SCREEN_WIDTH * 0.8,
           resizeMode: "contain",
         }}
       />
-      <View style={[{ width: '100%' }]}>
-         <Link href="/CameraScreen" style={general.button}>
-          <Text style={general.buttonText}>Scan Me</Text>
-        </Link>
-        <Link href={"/History"} style={general.button}>
-          <Text style={general.buttonText}>History</Text>
-        </Link>
-       
-      </View>
+    
     </View>
   );
 }
