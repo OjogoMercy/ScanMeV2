@@ -12,7 +12,7 @@ const Onboarding2 = () => {
           <StatusBar barStyle='dark-content' backgroundColor={Colors.background} />
           <Image source={ images.mascotFlash} style={{height:'50%', width:'90%',resizeMode:'contain'}} />
           <Text style={{ ...FONTS.h1, color: Colors.text, fontWeight: 'bold', textAlign:'center', marginTop:Sizes.padding}}>Hassle-Free Utility</Text>
-    <Text style={{...FONTS.body3, color:Colors.bodyText, textAlign:"center", marginTop:Sizes.padding}}>Every scan is automatically tagged and securely saved locally. Use the History tab to search and filter your data by type (URL, Phone, Email) instantly.</Text>
+    <Text style={{...FONTS.body3, color:Colors.bodyText, textAlign:"center", marginTop:Sizes.padding}}>We built this for speed and comfort. Get instant confirmation with haptic feedback and use the built-in flashlight for scanning in any light condition.</Text>
           <View style={[general.row, { marginTop: Sizes.navTitle * 3, width: '90%', }]}>
               <Link href={'/(tabs)'}>
               <Text style={{ ...FONTS.body2, color: Colors.primary, fontWeight: 'bold' }}>Skip</Text>

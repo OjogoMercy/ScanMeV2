@@ -30,8 +30,8 @@ const LoginScreen = () => {
   return (
       <View style={[general.container, { backgroundColor: Colors.background }]}>
           <StatusBar barStyle='dark-content' backgroundColor={Colors.background} />
-          <Text style={{ ...FONTS.h1, color: Colors.primary }}>Sign up</Text>
-          <Text style={{ textTransform: 'capitalize', textAlign: 'center', ...FONTS.h3, color: Colors.primary2}}>New here? Sign up and start your journey to make life easier.</Text>
+          <Text style={{ ...FONTS.h1, color: Colors.primary ,fontWeight:'bold',marginVertical:Sizes.padding}}>Sign up</Text>
+          <Text style={{ textTransform: 'capitalize', textAlign: 'center', ...FONTS.h3, color: Colors.bodyText}}>New here? Sign up and start your journey to make life easier.</Text>
                    <KeyboardAvoidingView style={styles.form} behavior='padding'>
               <CustomInput label='Name' placeholder='Enter Your Full Name' value={name} onChangeText={setName} />
               <CustomInput label='Email' placeholder='Enter Your Email' value={email} onChangeText={setEmail} iconName='email' />
