@@ -11,11 +11,12 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View,Image
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { Colors, FONTS, Sizes } from "../../constants/theme";
 import { MotiView, MotiText } from 'moti';
+import { images } from "@/assets/images";
 
 interface ScanData {
   id: number;
@@ -50,7 +51,6 @@ const History = () => {
     }
   };
 
-  // Filter data whenever scanHistory or activeFilter changes
   useEffect(() => {
     if (activeFilter === 'all') {
       setFilteredData(scanHistory);
@@ -126,6 +126,7 @@ const History = () => {
       <Text style={styles.title}>Scan History</Text>
       {scanHistory.length === 0 ? (
         <View style={styles.emptyState}>
+          <Image style={{height:'25%', width:'18%', resizeMode:'contain'}} source={images.Splash} />
           <Text style={{...FONTS.h3, fontWeight:'bold'}}>No scans yet</Text>
           <Text style={styles.emptySubtext}>
             Scan some QR codes to see them here!

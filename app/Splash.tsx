@@ -11,7 +11,7 @@ const router = useRouter()
        
         const timer = setTimeout(() => {
 
-            router.replace('/(tabs)')
+            router.replace('/Onboarding1')
         },
             2000)
         return () => clearTimeout(timer)
