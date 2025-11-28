@@ -22,7 +22,7 @@ const router = useRouter()
 
             router.replace('/')
         },
-            1500)
+            2000)
         return () => clearTimeout(timer)
     },[router])
   return (
@@ -33,7 +33,7 @@ const router = useRouter()
   animate={{ translateY: 0, opacity: 1, scale: 1 }}
               transition={{
                   type: "spring",
-                  damping: 10,
+                  damping: 15,
                   stiffness:170
               }}
               style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:Colors.primary}}
