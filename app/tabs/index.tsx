@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '@/constants/theme';
+import { Colors } from '../../constants/theme';
 
 
 
@@ -16,7 +16,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="home" 
+        name="CammeraScreen" 
         options={{
           title: 'Home',
           tabBarIcon: ({ color, focused }) => (
@@ -26,7 +26,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="history"
+        name="History"
         options={{
           title: 'History',
           tabBarIcon: ({ color, focused }) => (
@@ -34,16 +34,7 @@ export default function TabLayout() {
           ),
         }}
       />
-
-      <Tabs.Screen
-        name="settings" 
-        options={{
-          title: 'Settings',
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'settings' : 'settings-outline'} color={color} size={24} />
-          ),
-        }}
-      />
+     
     </Tabs>
   );
 }

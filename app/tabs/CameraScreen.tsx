@@ -1,5 +1,5 @@
 import general from "@/constants/General";
-import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/theme";
+import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/theme";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Ionicon from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -26,7 +26,7 @@ const CameraScreen = () => {
   const [scanned, setScanned] = useState(false);
   const [textModalVisible, setTextModalVisible] = useState(false);
   const [currentText, setCurrentText] = useState("");
-
+  
   const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.7;
   const scanLineAnim = React.useRef(new Animated.Value(0)).current;
   const [flash, setFlash] = useState(false);
@@ -198,7 +198,6 @@ const CameraScreen = () => {
   }
   return (
     <View style={general.container}>
-      {/* <StatusBar hidden /> */}
       <CameraView
         style={StyleSheet.absoluteFillObject}
         facing="back"

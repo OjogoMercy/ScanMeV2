@@ -14,10 +14,8 @@ import {
   View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors, FONTS, Sizes } from "../constants/theme";
+import { Colors, FONTS, Sizes } from "../../constants/theme";
 import { MotiView, MotiText } from 'moti';
-import { opacity } from "react-native-reanimated/lib/typescript/Colors";
-import Index from ".";
 
 interface ScanData {
   id: number;
