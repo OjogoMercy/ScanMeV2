@@ -19,7 +19,7 @@ export default function TabLayout() {
         transitionSpec: {
           animation: 'timing',
           config: {
-            duration: 500
+            duration: 200
           }
         }
       }}

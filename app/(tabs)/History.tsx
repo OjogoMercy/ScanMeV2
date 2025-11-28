@@ -226,7 +226,6 @@ const styles = StyleSheet.create({
     padding: moderateScale(16),
     borderRadius: moderateScale(20),
     marginBottom: moderateScale(12),
-    elevation: 2,
   },
   itemHeader: {
     flexDirection: "row",

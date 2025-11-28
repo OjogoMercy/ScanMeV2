@@ -24,13 +24,13 @@ const router = useRouter()
   animate={{ translateY: 0, opacity: 1, scale: 1 }}
               transition={{
                   type: "spring",
-                  damping: 15,
-                  stiffness:170
+                  damping: 20,
+                  stiffness:200
               }}
               style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor:Colors.primary}}
               
           >
-          <Image source={images.Splash} style={{ height: '26%', width: '40%' }} />
+          <Image source={images.Splash} style={{ height: '30%', width: '45%', resizeMode:'contain' }} />
               
           </MotiView>
               

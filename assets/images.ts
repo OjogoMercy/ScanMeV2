@@ -1,4 +1,4 @@
 export const images = {
-    Splash: require('./images/splash2.png'),
+    Splash: require('./images/mascot.png'),
     icon: require('./images/splash.png'),
 };
