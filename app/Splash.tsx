@@ -6,15 +6,6 @@ import { Animated, StatusBar, StyleSheet, View ,Image} from 'react-native'
 import { MotiView } from 'moti'
 
 const Splash = () => {
-//     const fadeAnim = new Animated.Value(0)
-//     const imageOpacity = fadeAnim.interpolate({
-//         inputRange: [0,0.5, 1],
-//         outputRange: [0,1,1]
-//     })
-//     const imageTransformY = fadeAnim.interpolate({
-//         inputRange: [0, 1],
-//         outputRange: [100, 0]
-//     })
 const router = useRouter()
     useEffect(() => {
        
