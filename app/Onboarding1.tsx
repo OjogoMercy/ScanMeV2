@@ -5,8 +5,15 @@ import { Colors, FONTS, Sizes } from '@/constants/theme'
 import { images } from '@/assets/images'
 import Ionicon  from '@expo/vector-icons/Ionicons'
 import { Link } from 'expo-router'
-
+import { AndroidHaptics } from 'expo-haptics'
+import HapticFeedback from 'react-native-haptic-feedback';
 const Onboarding1 = () => {
+
+  const options = {
+    enableVibrateFallBack: true,
+    ignoreAndroidSystemSettings: false
+  }
+  
   return (
       <View style={[general.container, { backgroundColor: Colors.background , alignItems:'center', padding:Sizes.padding}]}>
           <StatusBar barStyle='dark-content' backgroundColor={Colors.background} />
@@ -18,7 +25,7 @@ const Onboarding1 = () => {
               <Text style={{ ...FONTS.body2, color: Colors.primary, fontWeight: 'bold' }}>Skip</Text>
                    </Link>
               <Link href={'/Onboarding2'} asChild>
-                   <TouchableOpacity>
+                   <TouchableOpacity onPress={() => HapticFeedback.trigger("impactMedium")}>
               <Ionicon name="arrow-forward-circle" size={45} color={Colors.primary} />
                   
               </TouchableOpacity>
