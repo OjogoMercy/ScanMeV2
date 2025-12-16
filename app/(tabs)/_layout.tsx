@@ -15,53 +15,54 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: tintColor,
         headerShown: false,
-        animation: 'fade',
+        tabBarStyle: { backgroundColor: "#90d5ff" ,},
+        animation: "fade",
         transitionSpec: {
-          animation: 'timing',
+          animation: "timing",
           config: {
-            duration: 200
-          }
-        }
+            duration: 200,
+          },
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "Home",
-         tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ color, focused }) =>
             focused ? (
               <HomeIcon color={color} size={30} />
             ) : (
               <HomeOutline color={color} size={24} />
-            )
-          ),
+            ),
         }}
       />
       <Tabs.Screen
-        name="CameraScreen" 
+        name="CameraScreen"
         options={{
-          title: 'Scan',
-          tabBarIcon: ({ color, focused }) => (
-            
-              focused ? (
+          title: "Scan",
+          tabBarIcon: ({ color, focused }) =>
+            focused ? (
               <CameraIcon color={color} size={30} />
-              ):(
+            ) : (
               <CameraOutline color={color} size={24} />
-            )
-           ),
+            ),
         }}
       />
 
       <Tabs.Screen
         name="History"
         options={{
-          title: 'History',
+          title: "History",
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'time' : 'time-outline'} color={color} size={focused ? 30 :24} />
+            <Ionicons
+              name={focused ? "time" : "time-outline"}
+              color={color}
+              size={focused ? 30 : 24}
+            />
           ),
         }}
       />
-     
     </Tabs>
   );
 }
