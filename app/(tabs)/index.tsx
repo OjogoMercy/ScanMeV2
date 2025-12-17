@@ -14,7 +14,7 @@ export default function Index() {
         uri: "https://cdn.promptden.com/images/7061bfbd-8009-4dc6-a0f7-0238a959e04c.webp",
       }}
       imageStyle={{ ...StyleSheet.absoluteFillObject }}
-      blurRadius={100}
+      blurRadius={50}
       style={{
         flex: 1,
         alignItems: "center",
@@ -29,7 +29,7 @@ export default function Index() {
       />
       <View
         style={{
-          backgroundColor: "rgba(148, 183, 218, 0.6)",
+          backgroundColor: "rgba(148, 183, 218, 0.7)",
           ...StyleSheet.absoluteFillObject,
           alignItems: "center",
           padding: Sizes.padding,

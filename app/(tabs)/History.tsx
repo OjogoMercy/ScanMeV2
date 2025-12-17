@@ -169,10 +169,10 @@ const History = () => {
     <View
       style={[
         general.container,
-        { backgroundColor: Colors.background, marginTop: Sizes.bigRadius },
+        { backgroundColor: Colors.background, paddingTop: Sizes.navTitle },
       ]}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={"trasparent"} />
+      <StatusBar barStyle="dark-content" translucent={true} backgroundColor={Colors.background} />
       <Text style={styles.title}>Scan History</Text>
       <View>
         <FlatList
@@ -260,12 +260,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginVertical: moderateScale(20),
+    marginTop:moderateScale(50)
   },
   emptyState: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     padding: Sizes.padding,
+    marginTop: Sizes.padding,
   },
   emptySubtext: {
     marginTop: moderateScale(10),
@@ -275,7 +277,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingHorizontal: moderateScale(16),
-    paddingBottom: moderateScale(30),
+    paddingBottom: moderateScale(50),
   },
   historyItem: {
     backgroundColor: "white",
