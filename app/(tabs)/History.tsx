@@ -172,7 +172,7 @@ const History = () => {
         { backgroundColor: Colors.background, marginTop: Sizes.bigRadius },
       ]}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
+      <StatusBar barStyle="dark-content" backgroundColor={'trasparent'} />
       <Text style={styles.title}>Scan History</Text>
 
       <FlatList

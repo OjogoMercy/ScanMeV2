@@ -14,6 +14,7 @@ export default function Index() {
         uri: "https://cdn.promptden.com/images/7061bfbd-8009-4dc6-a0f7-0238a959e04c.webp",
       }}
       imageStyle={{ ...StyleSheet.absoluteFillObject }}
+      blurRadius={100}
       style={{
         flex: 1,
         alignItems: "center",
@@ -26,11 +27,18 @@ export default function Index() {
         backgroundColor={"transparent"}
         translucent
       />
-      <View style={{backgroundColor:'rgba(0, 0, 0, 0.1)' , ...StyleSheet.absoluteFillObject}}>
+      <View
+        style={{
+          backgroundColor: "rgba(148, 183, 218, 0.6)",
+          ...StyleSheet.absoluteFillObject,
+          alignItems: "center",
+          padding: Sizes.padding,
+        }}
+      >
         <Text
           style={{
             ...FONTS.h1,
-            color: Colors.text,
+            color: Colors.offWhite,
             fontWeight: "bold",
             marginTop: Sizes.padding,
           }}
@@ -41,14 +49,14 @@ export default function Index() {
           style={{
             ...FONTS.body3a,
             textAlign: "center",
-            color: Colors.bodyText,
+            color: Colors.offWhite,
           }}
         >
           Your Files are not stable , they physically deteriorate overtime, Why
           not try to preserve them.
         </Text>
         <Image
-          source={require("../../assets/images/man.jpg")}
+          source={require("../../assets/images/doc.png")}
           style={{
             height: SCREEN_HEIGHT * 0.6,
             width: SCREEN_WIDTH * 0.8,

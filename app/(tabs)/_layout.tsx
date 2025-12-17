@@ -4,7 +4,7 @@ import { Tabs } from "expo-router";
 import React from "react";
 import { CameraIcon as CameraOutline } from "react-native-heroicons/outline";
 import { CameraIcon } from "react-native-heroicons/solid";
-import { Colors } from "../../constants/theme";
+import { Colors, Sizes } from "../../constants/theme";
 
 export default function TabLayout() {
   const tintColor = Colors.primary;
@@ -21,6 +21,11 @@ export default function TabLayout() {
             duration: 200,
           },
         },
+        tabBarIconStyle: {
+          backgroundColor: Colors.offWhite,
+          height: Sizes.padding * 3,
+          borderRadius:Sizes.padding*2
+        }
       
       }}
     >
