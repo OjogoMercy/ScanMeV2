@@ -56,7 +56,7 @@ export default function Index() {
           not try to preserve them.
         </Text>
         <Image
-          source={require("../../assets/images/doc.png")}
+          source={require("../../assets/images/mascot.png")}
           style={{
             height: SCREEN_HEIGHT * 0.6,
             width: SCREEN_WIDTH * 0.8,
