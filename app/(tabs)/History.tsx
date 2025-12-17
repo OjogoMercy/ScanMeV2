@@ -1,3 +1,4 @@
+import { images } from "@/assets/images";
 import general from "@/constants/General";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
@@ -16,7 +17,13 @@ import {
   View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors, Sizes } from "../../constants/theme";
+import {
+  Colors,
+  FONTS,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  Sizes,
+} from "../../constants/theme";
 
 interface ScanData {
   id: number;
@@ -117,12 +124,16 @@ const History = () => {
   const renderEmptyContent = () => {
     if (scanHistory.length === 0) {
       return (
-        <View style={styles.trueEmptyContainer}>
+        <View style={styles.emptyState}>
           <Image
-            style={{ height: "50%", width: "80%", resizeMode: "contain" }}
+            style={{
+              height: SCREEN_HEIGHT * 0.3,
+              width: SCREEN_WIDTH * 0.8,
+              resizeMode: "contain",
+            }}
             source={require("../../assets/images/emptyScan.png")}
           />
-          <Text style={styles.emptyTitle}>No Scans Yet!</Text>
+          <Text style={{ ...FONTS.h3, fontWeight: "bold" }}>No Scans Yet!</Text>
           <Text style={styles.emptySubtext}>
             Scan some QR codes to see them here!
           </Text>
@@ -130,13 +141,21 @@ const History = () => {
       );
     }
 
-    if (activeFilter !== "all" && filteredData.length === 0) {
+    if (filteredData.length === 0) {
       return (
-        <View style={styles.filterEmptyContainer}>
-          <Text style={styles.filterEmptyTitle}>
-            No {activeFilter.toUpperCase()} Scans Found
+        <View style={styles.emptyState}>
+          <Image
+            style={{
+              height: SCREEN_HEIGHT * 0.3,
+              width: SCREEN_WIDTH * 0.8,
+              resizeMode: "contain",
+            }}
+            source={images.emptyScan}
+          />
+          <Text style={{ ...FONTS.h3, fontWeight: "bold" }}>
+            No {activeFilter.toLowerCase()} Scans Found
           </Text>
-          <Text style={styles.filterEmptySubtext}>
+          <Text style={styles.emptySubtext}>
             Try changing your category filter or scanning a new item.
           </Text>
         </View>
@@ -155,85 +174,77 @@ const History = () => {
     >
       <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
       <Text style={styles.title}>Scan History</Text>
-      {scanHistory.length === 0 ? (
-        <View style={styles.emptyState}>
-          <Image
-            style={{ height: "25%", width: "18%", resizeMode: "contain" }}
-            source={images.Splash}
-          />
-          <Text style={{ ...FONTS.h3, fontWeight: "bold" }}>No scans yet</Text>
-          <Text style={styles.emptySubtext}>
-            Scan some QR codes to see them here!
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          data={filteredData}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item, index }) => (
-            <MotiView
-              style={styles.historyItem}
-              key={item.id}
-              from={{ opacity: 0, translateY: 100 }}
-              animate={{ opacity: 1, translateY: 0 }}
-              transition={{
-                type: "timing",
-                duration: 1000,
-                delay: index * 100,
-                // easing:'ease-in'
-              }}
-            >
-              <View style={styles.itemHeader}>
-                <Text style={styles.typeText}>{item.type.toUpperCase()}</Text>
-                <Text style={styles.dateText}>
-                  {formatDate(item.timestamp)}
+
+      <FlatList
+        data={filteredData}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item, index }) => (
+          <MotiView
+            style={styles.historyItem}
+            key={item.id}
+            from={{ opacity: 0, translateY: 100 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            transition={{
+              type: "timing",
+              duration: 1000,
+              delay: index * 100,
+            }}
+          >
+            <View style={styles.itemHeader}>
+              <Text style={styles.typeText}>{item.type.toUpperCase()}</Text>
+              <Text style={styles.dateText}>{formatDate(item.timestamp)}</Text>
+            </View>
+            <Text style={styles.dataText} numberOfLines={2}>
+              {item.data}
+            </Text>
+            <View style={styles.actions}>
+              {item.type === "url" && (
+                <TouchableOpacity
+                  style={styles.actionButton}
+                  onPress={() => Linking.openURL(item.data)}
+                >
+                  <Text style={styles.actionText}>Open</Text>
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity
+                style={styles.actionButton}
+                onPress={() => copyToClipboard(item.data)}
+              >
+                <Text style={styles.actionText}>Copy</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.actionButton}
+                onPress={() => favoriteScan(item.id)}
+              >
+                <Text style={[styles.actionText, { color: Colors.accent }]}>
+                  {item.favorite ? "★" : "☆"}
                 </Text>
-              </View>
-              <Text style={styles.dataText} numberOfLines={2}>
-                {item.data}
-              </Text>
-              <View style={styles.actions}>
-                {item.type === "url" && (
-                  <TouchableOpacity
-                    style={styles.actionButton}
-                    onPress={() => Linking.openURL(item.data)}
-                  >
-                    <Text style={styles.actionText}>Open</Text>
-                  </TouchableOpacity>
-                )}
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() => copyToClipboard(item.data)}
-                >
-                  <Text style={styles.actionText}>Copy</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() => favoriteScan(item.id)}
-                >
-                  <Text style={[styles.actionText, { color: Colors.accent }]}>
-                    {item.favorite ? "★" : "☆"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.actionButton, { backgroundColor: "#ffdbee" }]}
-                  onPress={() => deleteScan(item.id)}
-                >
-                  <Text style={styles.deleteText}>Delete</Text>
-                </TouchableOpacity>
-              </View>
-            </MotiView>
-          )}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={
-            filteredData.length === 0
-              ? { flexGrow: 1, justifyContent: "center", alignItems: "center" }
-              : styles.listContent
-          }
-          ListHeaderComponent={renderCategoryFilter()}
-          ListEmptyComponent={renderEmptyContent()}
-        />
-      )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.actionButton, { backgroundColor: "#ffdbee" }]}
+                onPress={() => deleteScan(item.id)}
+              >
+                <Text style={styles.deleteText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          </MotiView>
+        )}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={
+          filteredData.length === 0
+            ? {
+                flexGrow: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                padding: Sizes.padding,
+              }
+            : styles.listContent
+        }
+        ListHeaderComponent={
+          scanHistory.length > 0 ? renderCategoryFilter() : null
+        }
+        ListEmptyComponent={renderEmptyContent()}
+      />
     </View>
   );
 };
@@ -251,11 +262,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding: Sizes.padding,
   },
   emptySubtext: {
     marginTop: moderateScale(10),
     color: "#666",
     fontSize: moderateScale(14),
+    textAlign: "center",
   },
   listContent: {
     paddingHorizontal: moderateScale(16),
