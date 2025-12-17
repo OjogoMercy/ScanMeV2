@@ -172,79 +172,82 @@ const History = () => {
         { backgroundColor: Colors.background, marginTop: Sizes.bigRadius },
       ]}
     >
-      <StatusBar barStyle="dark-content" backgroundColor={'trasparent'} />
+      <StatusBar barStyle="dark-content" backgroundColor={"trasparent"} />
       <Text style={styles.title}>Scan History</Text>
-
-      <FlatList
-        data={filteredData}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item, index }) => (
-          <MotiView
-            style={styles.historyItem}
-            key={item.id}
-            from={{ opacity: 0, translateY: 100 }}
-            animate={{ opacity: 1, translateY: 0 }}
-            transition={{
-              type: "timing",
-              duration: 1000,
-              delay: index * 100,
-            }}
-          >
-            <View style={styles.itemHeader}>
-              <Text style={styles.typeText}>{item.type.toUpperCase()}</Text>
-              <Text style={styles.dateText}>{formatDate(item.timestamp)}</Text>
-            </View>
-            <Text style={styles.dataText} numberOfLines={2}>
-              {item.data}
-            </Text>
-            <View style={styles.actions}>
-              {item.type === "url" && (
+      <View>
+        <FlatList
+          data={filteredData}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item, index }) => (
+            <MotiView
+              style={styles.historyItem}
+              key={item.id}
+              from={{ opacity: 0, translateY: 100 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{
+                type: "timing",
+                duration: 1000,
+                delay: index * 100,
+              }}
+            >
+              <View style={styles.itemHeader}>
+                <Text style={styles.typeText}>{item.type.toUpperCase()}</Text>
+                <Text style={styles.dateText}>
+                  {formatDate(item.timestamp)}
+                </Text>
+              </View>
+              <Text style={styles.dataText} numberOfLines={2}>
+                {item.data}
+              </Text>
+              <View style={styles.actions}>
+                {item.type === "url" && (
+                  <TouchableOpacity
+                    style={styles.actionButton}
+                    onPress={() => Linking.openURL(item.data)}
+                  >
+                    <Text style={styles.actionText}>Open</Text>
+                  </TouchableOpacity>
+                )}
                 <TouchableOpacity
                   style={styles.actionButton}
-                  onPress={() => Linking.openURL(item.data)}
+                  onPress={() => copyToClipboard(item.data)}
                 >
-                  <Text style={styles.actionText}>Open</Text>
+                  <Text style={styles.actionText}>Copy</Text>
                 </TouchableOpacity>
-              )}
-              <TouchableOpacity
-                style={styles.actionButton}
-                onPress={() => copyToClipboard(item.data)}
-              >
-                <Text style={styles.actionText}>Copy</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.actionButton}
-                onPress={() => favoriteScan(item.id)}
-              >
-                <Text style={[styles.actionText, { color: Colors.accent }]}>
-                  {item.favorite ? "★" : "☆"}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.actionButton, { backgroundColor: "#ffdbee" }]}
-                onPress={() => deleteScan(item.id)}
-              >
-                <Text style={styles.deleteText}>Delete</Text>
-              </TouchableOpacity>
-            </View>
-          </MotiView>
-        )}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={
-          filteredData.length === 0
-            ? {
-                flexGrow: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                padding: Sizes.padding,
-              }
-            : styles.listContent
-        }
-        ListHeaderComponent={
-          scanHistory.length > 0 ? renderCategoryFilter() : null
-        }
-        ListEmptyComponent={renderEmptyContent()}
-      />
+                <TouchableOpacity
+                  style={styles.actionButton}
+                  onPress={() => favoriteScan(item.id)}
+                >
+                  <Text style={[styles.actionText, { color: Colors.accent }]}>
+                    {item.favorite ? "★" : "☆"}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.actionButton, { backgroundColor: "#ffdbee" }]}
+                  onPress={() => deleteScan(item.id)}
+                >
+                  <Text style={styles.deleteText}>Delete</Text>
+                </TouchableOpacity>
+              </View>
+            </MotiView>
+          )}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={
+            filteredData.length === 0
+              ? {
+                  // flexGrow: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: Sizes.padding,
+                }
+              : styles.listContent
+          }
+          ListHeaderComponent={
+            scanHistory.length > 0 ? renderCategoryFilter() : null
+          }
+          ListEmptyComponent={renderEmptyContent()}
+        />
+      </View>
     </View>
   );
 };
@@ -272,8 +275,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingHorizontal: moderateScale(16),
-    paddingBottom: moderateScale(20),
-    flex: 1,
+    paddingBottom: moderateScale(30),
   },
   historyItem: {
     backgroundColor: "white",

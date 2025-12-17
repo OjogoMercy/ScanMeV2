@@ -2,12 +2,22 @@ import { Ionicons } from "@expo/vector-icons";
 import Icon from "@expo/vector-icons/Octicons";
 import { Tabs } from "expo-router";
 import React from "react";
+import { View } from "react-native";
 import { CameraIcon as CameraOutline } from "react-native-heroicons/outline";
 import { CameraIcon } from "react-native-heroicons/solid";
 import { Colors, Sizes } from "../../constants/theme";
 
 export default function TabLayout() {
   const tintColor = Colors.primary;
+  const iconContainerStyle = {
+    height: Sizes.navTitle * 2,
+    borderRadius: Sizes.padding * 2,
+    width: Sizes.navTitle * 2,
+    alignItems: "center",
+    justifyContent: "center",
+
+    zIndex: 10,
+  };
 
   return (
     <Tabs
@@ -21,12 +31,6 @@ export default function TabLayout() {
             duration: 200,
           },
         },
-        tabBarIconStyle: {
-          backgroundColor: Colors.offWhite,
-          height: Sizes.padding * 3,
-          borderRadius:Sizes.padding*2
-        }
-      
       }}
     >
       <Tabs.Screen
@@ -34,11 +38,12 @@ export default function TabLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
-            <Icon
-              name={focused ? "home-fill" : "home"}
-              size={focused ? 26 : 24}
-              color={color}
-            />
+          
+              <Icon
+                name={focused ? "home-fill" : "home"}
+                size={focused ? 26 : 24}
+                color={color}
+              />
           ),
         }}
       />
@@ -46,12 +51,23 @@ export default function TabLayout() {
         name="CameraScreen"
         options={{
           title: "Scan",
-          tabBarIcon: ({ color, focused }) =>
-            focused ? (
-              <CameraIcon color={color} size={30} />
-            ) : (
-              <CameraOutline color={color} size={24} />
-            ),
+          tabBarIcon: ({ color, focused }) => (
+            <View
+              style={[
+                iconContainerStyle,
+                {
+                  backgroundColor: focused ? Colors.offWhite : Colors.offWhite,
+                  borderRadius: Sizes.padding * 2,
+                },
+              ]}
+            >
+              {focused ? (
+                <CameraIcon color={color} size={30} />
+              ) : (
+                <CameraOutline color={color} size={24} />
+              )}
+            </View>
+          ),
         }}
       />
 
