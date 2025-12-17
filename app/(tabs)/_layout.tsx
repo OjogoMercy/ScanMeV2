@@ -1,21 +1,19 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '../../constants/theme';
-import {CameraIcon as CameraOutline, HomeIcon as HomeOutline} from 'react-native-heroicons/outline'
-import {CameraIcon,HomeIcon} from 'react-native-heroicons/solid'
-
-
+import { Ionicons } from "@expo/vector-icons";
+import Icon from "@expo/vector-icons/Octicons";
+import { Tabs } from "expo-router";
+import React from "react";
+import { CameraIcon as CameraOutline } from "react-native-heroicons/outline";
+import { CameraIcon } from "react-native-heroicons/solid";
+import { Colors } from "../../constants/theme";
 
 export default function TabLayout() {
-  const tintColor = Colors.primary; 
+  const tintColor = Colors.primary;
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: tintColor,
         headerShown: false,
-        tabBarStyle: { backgroundColor: "#90d5ff" ,},
         animation: "fade",
         transitionSpec: {
           animation: "timing",
@@ -23,18 +21,20 @@ export default function TabLayout() {
             duration: 200,
           },
         },
+      
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color, focused }) =>
-            focused ? (
-              <HomeIcon color={color} size={30} />
-            ) : (
-              <HomeOutline color={color} size={24} />
-            ),
+          tabBarIcon: ({ color, focused }) => (
+            <Icon
+              name={focused ? "home-fill" : "home"}
+              size={focused ? 26 : 24}
+              color={color}
+            />
+          ),
         }}
       />
       <Tabs.Screen

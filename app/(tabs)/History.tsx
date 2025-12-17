@@ -1,22 +1,22 @@
 import general from "@/constants/General";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import * as Clipboard from 'expo-clipboard';
+import * as Clipboard from "expo-clipboard";
+import { MotiView } from "moti";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
   FlatList,
+  Image,
   Linking,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,Image
+  View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors, FONTS, Sizes } from "../../constants/theme";
-import { MotiView, MotiText } from 'moti';
-import { images } from "@/assets/images";
+import { Colors, Sizes } from "../../constants/theme";
 
 interface ScanData {
   id: number;
@@ -28,7 +28,7 @@ interface ScanData {
 
 const History = () => {
   const [scanHistory, setScanHistory] = useState<ScanData[]>([]);
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilter, setActiveFilter] = useState("all");
   const [filteredData, setFilteredData] = useState<ScanData[]>([]);
 
   useFocusEffect(
@@ -36,7 +36,6 @@ const History = () => {
       loadScanHistory();
     }, [])
   );
-
 
   const loadScanHistory = async () => {
     try {
@@ -52,7 +51,7 @@ const History = () => {
   };
 
   useEffect(() => {
-    if (activeFilter === 'all') {
+    if (activeFilter === "all") {
       setFilteredData(scanHistory);
     } else {
       const filtered = scanHistory.filter((item) => item.type === activeFilter);
@@ -67,7 +66,6 @@ const History = () => {
     await AsyncStorage.setItem("scanHistory", JSON.stringify(updatedHistory));
   };
 
-
   const favoriteScan = async (id: number) => {
     const updatedHistory = scanHistory.map((item) =>
       item.id === id ? { ...item, favorite: !item.favorite } : item
@@ -80,22 +78,19 @@ const History = () => {
     Clipboard.setStringAsync(text);
     Alert.alert("Copied!", "Text copied to clipboard");
   };
-
   const formatDate = (timestamp: string) => {
     const date = new Date(timestamp);
     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
   };
-
-  const categories = ['all', 'url', 'email', 'phone', 'text', 'wifi'];
-
-
+  const categories = ["all", "url", "email", "phone", "text", "wifi"];
   const renderCategoryFilter = () => (
-    <MotiView style={styles.categoryBar}
-      from={{ translateY: 100 , opacity:0}}
-      animate={{ translateY: 0, opacity:1 }}
+    <MotiView
+      style={styles.categoryBar}
+      from={{ translateY: 100, opacity: 0 }}
+      animate={{ translateY: 0, opacity: 1 }}
       transition={{
-        type: 'timing',
-        duration:700
+        type: "timing",
+        duration: 700,
       }}
     >
       {categories.map((cat) => (
@@ -104,7 +99,7 @@ const History = () => {
           style={[
             styles.categoryButton,
             activeFilter === cat && styles.activeButton,
-          ]}  
+          ]}
           onPress={() => setActiveFilter(cat)}
         >
           <Text
@@ -119,15 +114,54 @@ const History = () => {
       ))}
     </MotiView>
   );
+  const renderEmptyContent = () => {
+    if (scanHistory.length === 0) {
+      return (
+        <View style={styles.trueEmptyContainer}>
+          <Image
+            style={{ height: "50%", width: "80%", resizeMode: "contain" }}
+            source={require("../../assets/images/emptyScan.png")}
+          />
+          <Text style={styles.emptyTitle}>No Scans Yet!</Text>
+          <Text style={styles.emptySubtext}>
+            Scan some QR codes to see them here!
+          </Text>
+        </View>
+      );
+    }
+
+    if (activeFilter !== "all" && filteredData.length === 0) {
+      return (
+        <View style={styles.filterEmptyContainer}>
+          <Text style={styles.filterEmptyTitle}>
+            No {activeFilter.toUpperCase()} Scans Found
+          </Text>
+          <Text style={styles.filterEmptySubtext}>
+            Try changing your category filter or scanning a new item.
+          </Text>
+        </View>
+      );
+    }
+
+    return null;
+  };
 
   return (
-    <View style={[general.container, { backgroundColor: Colors.background , marginTop:Sizes.bigRadius}]}>
+    <View
+      style={[
+        general.container,
+        { backgroundColor: Colors.background, marginTop: Sizes.bigRadius },
+      ]}
+    >
       <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
       <Text style={styles.title}>Scan History</Text>
       {scanHistory.length === 0 ? (
         <View style={styles.emptyState}>
-          <Image style={{height:'25%', width:'18%', resizeMode:'contain'}} source={images.Splash} />
-          <Text style={{...FONTS.h3, fontWeight:'bold'}}>No scans yet</Text>
+          <Image
+            style={{ height: "25%", width: "18%", resizeMode: "contain" }}
+            source={images.Splash}
+          />
+          <Text style={{ ...FONTS.h3, fontWeight: "bold" }}>No scans yet</Text>
           <Text style={styles.emptySubtext}>
             Scan some QR codes to see them here!
           </Text>
@@ -136,17 +170,17 @@ const History = () => {
         <FlatList
           data={filteredData}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item ,index}) => (
-            <MotiView style={styles.historyItem}
+          renderItem={({ item, index }) => (
+            <MotiView
+              style={styles.historyItem}
               key={item.id}
-              from={{opacity:0, translateY:100}}
-              animate={{ opacity:1, translateY: 0 }}
+              from={{ opacity: 0, translateY: 100 }}
+              animate={{ opacity: 1, translateY: 0 }}
               transition={{
-                type:"timing",
+                type: "timing",
                 duration: 1000,
                 delay: index * 100,
                 // easing:'ease-in'
-
               }}
             >
               <View style={styles.itemHeader}>
@@ -177,7 +211,7 @@ const History = () => {
                   style={styles.actionButton}
                   onPress={() => favoriteScan(item.id)}
                 >
-                  <Text style={[styles.actionText, {color:Colors.accent}]}>
+                  <Text style={[styles.actionText, { color: Colors.accent }]}>
                     {item.favorite ? "★" : "☆"}
                   </Text>
                 </TouchableOpacity>
@@ -191,8 +225,13 @@ const History = () => {
             </MotiView>
           )}
           keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.listContent}
+          contentContainerStyle={
+            filteredData.length === 0
+              ? { flexGrow: 1, justifyContent: "center", alignItems: "center" }
+              : styles.listContent
+          }
           ListHeaderComponent={renderCategoryFilter()}
+          ListEmptyComponent={renderEmptyContent()}
         />
       )}
     </View>
@@ -221,6 +260,7 @@ const styles = StyleSheet.create({
   listContent: {
     paddingHorizontal: moderateScale(16),
     paddingBottom: moderateScale(20),
+    flex: 1,
   },
   historyItem: {
     backgroundColor: "white",
