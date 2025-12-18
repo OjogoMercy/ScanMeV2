@@ -1,6 +1,5 @@
-// src/hooks/useAuth.ts
 import { useEffect, useState } from "react";
-import { auth } from "../";
+import { auth } from "../firebaseConfig";
 import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
 
 export function useAuth() {
