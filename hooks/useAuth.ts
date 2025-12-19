@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
-import { auth } from "../firebaseConfig";
-import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
+// import { useEffect, useState } from "react";
+// import { auth } from "../firebaseConfig";
+// import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
 
-export function useAuth() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+// export function useAuth() {
+//   const [user, setUser] = useState(null);
+//   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (u) => {
-      if (!u) {
-        await signInAnonymously(auth);
-      } else {
-        setUser(u);
-        setLoading(false);
-      }
-    });
+//   useEffect(() => {
+//     const unsub = onAuthStateChanged(auth, async (u) => {
+//       if (!u) {
+//         await signInAnonymously(auth);
+//       } else {
+//         setUser(u);
+//         setLoading(false);
+//       }
+//     });
 
-    return unsub;
-  }, []);
+//     return unsub;
+//   }, []);
 
-  return { user, loading };
-}
+//   return { user, loading };
+// }

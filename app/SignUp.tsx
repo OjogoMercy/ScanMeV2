@@ -1,40 +1,71 @@
 import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
 import general from "@/constants/General";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  Image,
+  Alert,
   KeyboardAvoidingView,
   StatusBar,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import { images } from "../assets/images";
 import { Colors, FONTS, Sizes } from "../constants/theme";
 const LoginScreen = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const router = useRouter();
+  const submitData = () => {
+    if (!name || !email || !password || !confirmPassword) {
+      Alert.alert("Error", "Please fill all the fields");
+      return;
+    } else if (password !== confirmPassword) {
+      Alert.alert("Error", "Passwords do not match");
+      return;
+    } else {
+      router.push("/LoginScreen");
+    }
+    console.log(userData);
+  };
+  const userData = {
+    name,
+    email,
+    password,
+    confirmPassword,
+  };
   return (
     <View style={[general.container, { backgroundColor: Colors.background }]}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
       <Text
         style={{
-          ...FONTS.navTitle,
+          ...FONTS.h1,
           color: Colors.primary,
           fontWeight: "bold",
-          marginVertical: Sizes.padding * 2,
+          marginVertical: Sizes.padding,
         }}
       >
-        Sign In
+        Sign up
       </Text>
-      <Image
-        source={images.Splash}
-        style={{ height: "25%", width: "60%", resizeMode: "contain" }}
-      />
-
+      <Text
+        style={{
+          textTransform: "capitalize",
+          textAlign: "center",
+          ...FONTS.h3,
+          color: Colors.bodyText,
+        }}
+      >
+        New here? Sign up and start your journey to make life easier.
+      </Text>
       <KeyboardAvoidingView style={styles.form} behavior="padding">
+        <CustomInput
+          label="Name"
+          placeholder="Enter Your Full Name"
+          value={name}
+          onChangeText={setName}
+        />
         <CustomInput
           label="Email"
           placeholder="Enter Your Email"
@@ -50,8 +81,15 @@ const LoginScreen = () => {
           value={password}
           onChangeText={setPassword}
         />
-
-        <CustomButton title="Sign In" onPress={() => router.push("/")} />
+        <CustomInput
+          label="Confirm Password"
+          placeholder="Re-enter Your Password"
+          secure
+          iconName="lock"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+        />
+        <CustomButton title="Sign Up" onPress={submitData} />
       </KeyboardAvoidingView>
     </View>
   );
