@@ -13,6 +13,8 @@ import {
 } from "react-native";
 import { images } from "../assets/images";
 import { Colors, FONTS, Sizes } from "../constants/theme";
+import { signInWithEmailAndPassword } from "firebase/auth";
+
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

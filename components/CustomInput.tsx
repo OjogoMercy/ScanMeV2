@@ -15,7 +15,7 @@ import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH, Sizes } from "../constants/theme";
 
 type Props = {
   label?: string;
-  value: object;
+  value: string | undefined;
   onChangeText: (text: string) => void;
   placeholder?: string;
   secureTextEntry?: boolean;
