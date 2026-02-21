@@ -5,7 +5,11 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "firebase/auth/react-native": [
+        "./node_modules/firebase/auth/react-native/index.d.ts"
       ]
+      
     }
   },
   "include": [
@@ -13,5 +17,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "firebaseConfig.js"  ]
 }
