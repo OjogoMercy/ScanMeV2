@@ -1,21 +1,21 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React from "react";
 import {
-  TextInput,
   StyleSheet,
-  View,
   Text,
+  TextInput,
   TextStyle,
-  ViewStyle,
   TouchableOpacity,
+  View,
+  ViewStyle,
 } from "react-native";
-import { SCREEN_HEIGHT, SCREEN_WIDTH, Colors, Sizes } from '../constants/theme'
 import general from "../constants/General";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH, Sizes } from "../constants/theme";
 
 type Props = {
   label?: string;
-  value: (text: string) => void;
+  value: object;
   onChangeText: (text: string) => void;
   placeholder?: string;
   secureTextEntry?: boolean;
@@ -23,7 +23,7 @@ type Props = {
   containerStyle?: ViewStyle;
   error?: string;
   iconName?: string;
-  secure?:boolean
+  secure?: boolean;
 };
 
 const CustomInput = ({
@@ -35,10 +35,10 @@ const CustomInput = ({
   secureTextEntry = false,
   inputStyle,
   containerStyle,
-  error,iconName
+  error,
+  iconName,
 }: Props) => {
-
-    const [show, setShow] = React.useState(false);
+  const [show, setShow] = React.useState(false);
   return (
     <View style={[styles.container, containerStyle]}>
       {label && <Text style={general.label}>{label}</Text>}
@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: SCREEN_HEIGHT * 0.02,
   },
- 
 });
 
 export default CustomInput;
