@@ -1,23 +1,31 @@
-// import { useEffect, useState } from "react";
-// import { auth } from "../firebaseConfig";
-// import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { auth } from "../firebaseConfig";
+import { onAuthStateChanged, signInAnonymously } from "firebase/auth";
 
-// export function useAuth() {
-//   const [user, setUser] = useState(null);
-//   const [loading, setLoading] = useState(true);
+// track if the user is logged in or not and also to use anonymous signin unless triggered 
+// so Mercy pls take note o 
+export function useAuth() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isAnonymous,setIsAnynonymous] = useState(false)
 
-//   useEffect(() => {
-//     const unsub = onAuthStateChanged(auth, async (u) => {
-//       if (!u) {
-//         await signInAnonymously(auth);
-//       } else {
-//         setUser(u);
-//         setLoading(false);
-//       }
-//     });
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, async (u) => {
+      if (u!){
+        try {
+          const result = await signInAnonymously(auth);
+          setUser(result.user);
+        } catch (err) {
+          console.error("Anonymous auth failed", err);
+        }
+      }else{
+        setUser(u);
+      }
+      setLoading(false);
+    });
 
-//     return unsub;
-//   }, []);
+    return unsub;
+  }, []);
 
-//   return { user, loading };
-// }
+  return { user, loading,isAnonymous : user?.isAnonymous };
+}
