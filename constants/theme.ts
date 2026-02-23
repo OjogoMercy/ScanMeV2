@@ -81,6 +81,14 @@ export const Sizes = {
   width,
   height,
 };
+export const FontStyles = {
+  ABCItalic: 'ABeeZee-Italic',
+  ABCRegular: 'ABeeZee-Regular',
+  ComicSans: 'Comic Sans MS',
+  heading: 'Inter_700Bold',
+    body: 'SourceSans3_400Regular',
+    numeric: 'SpaceMono_400Regular',
+}
 export const FONTS = {
   navTitle: { fontFamily: "Montserrat-Regular", fontSize: Sizes.navTitle },
   largeTitleBold: {
@@ -169,15 +177,26 @@ export const FONTS = {
     fontSize: Sizes.body4,
     lineHeight: 18,
   },
-  body5: {
-    fontFamily: "Montserrat-Regular",
-    fontSize: Sizes.body5,
-    lineHeight: 18,
+
+  h5bold: {
+    fontFamily: FontStyles.body,
+    fontSize: Sizes.h5,
+    lineHeight: screenHeight * 0.025,
   },
-  body6: {
-    fontFamily: "Montserrat-Regular",
-    fontSize: Sizes.body6 * 1.2,
-    lineHeight: 18,
+  h6: {
+    fontFamily: 'Poppins-Medium',
+    fontSize: Sizes.h6,
+    lineHeight: screenHeight * 0.025,
+  },
+  h6bold: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: Sizes.h6,
+    lineHeight: screenHeight * 0.025,
+  },  
+  body5: {
+    fontFamily: FontStyles.body,
+    fontSize: Sizes.body5,
+    lineHeight: 22,
   },
 };
 
