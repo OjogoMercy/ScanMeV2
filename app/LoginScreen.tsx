@@ -14,10 +14,25 @@ import {
 import { images } from "../assets/images";
 import { Colors, FONTS, Sizes } from "../constants/theme";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebaseConfig";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+const submitData = async () => {
+  if(!email || !password){
+    alert("please fill all the fields");
+    return;
+  }
+  try{
+    await signInWithEmailAndPassword(auth, email, password);
+    router.push("/(tabs)");
+  }catch(error){
+    alert(error.message);
+  }
+}
+
   return (
     <View style={[general.container, { backgroundColor: Colors.background }]}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />

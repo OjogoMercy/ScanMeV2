@@ -12,8 +12,9 @@ import {
   View,
 } from "react-native";
 import { Colors, FONTS, Sizes } from "../constants/theme";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, EmailAuthProvider } from "firebase/auth";
 import { auth } from "../firebaseConfig";
+import { EmailAuthCredential, linkWithCredential } from "firebase/auth";
 
 const LoginScreen = () => {
   const [name, setName] = useState("");
@@ -21,15 +22,30 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const router = useRouter();
-  const submitData = () => {
+  const submitData = async () => {
     if (!name || !email || !password || !confirmPassword) {
       Alert.alert("Error", "Please fill all the fields");
+      
       return;
     } else if (password !== confirmPassword) {
       Alert.alert("Error", "Passwords do not match");
+      
       return;
-    } else {
-      router.push("/LoginScreen");
+    } 
+    else {
+      try{
+        const credential =  EmailAuthProvider.credential (email,password); 
+        await linkWithCredential(auth.currentUser, credential)
+        alert("Account successfully upgraded! All your scans are saved.");
+      }catch(error){
+        if( error.code  === 'auth/email-already-in-use'){
+          alert("This email is already registered")
+        }else {
+          alert(error.message);
+        }
+
+      }
+      router.push("/(tabs)");
     }
     console.log(userData);
   };
@@ -39,6 +55,8 @@ const LoginScreen = () => {
     password,
     confirmPassword,
   };
+
+
   return (
     <View style={[general.container, { backgroundColor: Colors.background }]}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
