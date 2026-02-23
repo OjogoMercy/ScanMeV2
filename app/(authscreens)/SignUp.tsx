@@ -13,8 +13,8 @@ import {
   Text,
   View,
 } from "react-native";
-import { Colors, FONTS, Sizes } from "../constants/theme";
-import { auth } from "../firebaseConfig";
+import { Colors, FONTS, Sizes } from "../../constants/theme";
+import { auth } from "../../firebaseConfig";
 
 const LoginScreen = () => {
   const [name, setName] = useState("");

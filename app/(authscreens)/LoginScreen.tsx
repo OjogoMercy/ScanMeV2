@@ -15,8 +15,8 @@ import {
   Text,
   View,
 } from "react-native";
-import { images } from "../assets/images";
-import { Colors, FONTS, Sizes } from "../constants/theme";
+import { images } from "../../assets/images";
+import { Colors, FONTS, Sizes } from "../../constants/theme";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");

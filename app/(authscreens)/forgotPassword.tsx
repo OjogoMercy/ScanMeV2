@@ -1,28 +1,55 @@
+import { images } from "@/assets/images";
 import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
 import general from "@/constants/General";
 import { ThemedText } from "@/constants/ThemedText";
+import { auth } from "@/firebaseConfig";
 import { router } from "expo-router";
+import { sendPasswordResetEmail } from "firebase/auth";
 import React from "react";
 import {
+  Alert,
+  Image,
   KeyboardAvoidingView,
   StatusBar,
   StyleSheet,
   Text,
-  View,Image
+  View,
 } from "react-native";
-import { Colors, FONTS, Sizes } from "../constants/theme";
-import { images } from "@/assets/images";
+import { Colors, FONTS, Sizes } from "../../constants/theme";
 
 const ForgotPassword = () => {
   const [email, setEmail] = React.useState("");
-  const submitData = () => {
+  const [loading, setLoading] = React.useState(false);
+  const [emailSent, setEmailSent] = React.useState(false);
+
+  const submitData = async () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) {
       alert("Please enter your email");
       return;
-    }else{
-      router.push("/LoginScreen");
-
+    } else if (!emailRegex.test(email)) {
+      Alert.alert("Invalid Email", "Please enter a valid email address");
+      return;
+    }
+    setLoading(true);
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setEmailSent(true);
+      Alert.alert(
+        "Email Sent",
+        "Password reset link has been sent to your email. Please check your inbox (and spam folder).",
+        [
+          {
+            text: "OK",
+            onPress: () => router.back(),
+          },
+        ],
+      );
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,7 +66,10 @@ const ForgotPassword = () => {
       >
         Forgot Password
       </Text>
-      <Image source={images.emptyScan} style={{ height: "25%", width: "60%", resizeMode: "contain" }}/>
+      <Image
+        source={images.emptyScan}
+        style={{ height: "25%", width: "60%", resizeMode: "contain" }}
+      />
       <ThemedText
         style={{
           textAlign: "center",
@@ -58,8 +88,6 @@ const ForgotPassword = () => {
           onChangeText={setEmail}
           iconName="email"
         />
-
-        
 
         <CustomButton title="Send Reset Link" onPress={submitData} />
       </KeyboardAvoidingView>
