@@ -1,35 +1,56 @@
-import { StyleSheet, Text, View,StatusBar, KeyboardAvoidingView } from 'react-native'
-import React, { useState, } from 'react'
-import general from '@/constants/General'
-import { Colors, FONTS, Sizes } from '../constants/theme'
-import { ThemedText } from '@/constants/ThemedText'
-import CustomInput from '@/components/CustomInput'
-import CustomButton from '@/components/CustomButton'
-import { router } from 'expo-router'
+import CustomButton from "@/components/CustomButton";
+import CustomInput from "@/components/CustomInput";
+import general from "@/constants/General";
+import { ThemedText } from "@/constants/ThemedText";
+import { router } from "expo-router";
+import React from "react";
+import {
+  KeyboardAvoidingView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,Image
+} from "react-native";
+import { Colors, FONTS, Sizes } from "../constants/theme";
+import { images } from "@/assets/images";
 
 const ForgotPassword = () => {
-    const [email, setEmail] = React.useState("");
-const submitData = () => {
+  const [email, setEmail] = React.useState("");
+  const submitData = () => {
     if (!email) {
-        alert("Please enter your email");
-        return;
+      alert("Please enter your email");
+      return;
+    }else{
+      router.push("/LoginScreen");
+
     }
-}
+  };
 
   return (
-    <View style={[general.container, {backgroundColor:Colors.background}]}>
-       <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
-           <Text
-             style={{
-               ...FONTS.navTitle,
-               color: Colors.primary,
-               fontWeight: "bold",
-               marginVertical: Sizes.padding * 2,
-             }}
-           >
-             Forgot Password
-           </Text>
-            <KeyboardAvoidingView style={styles.form} behavior="padding">
+    <View style={[general.container, { backgroundColor: Colors.background }]}>
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
+      <Text
+        style={{
+          ...FONTS.navTitle,
+          color: Colors.primary,
+          fontWeight: "bold",
+          marginBottom: Sizes.padding * 2,
+        }}
+      >
+        Forgot Password
+      </Text>
+      <Image source={images.emptyScan} style={{ height: "25%", width: "60%", resizeMode: "contain" }}/>
+      <ThemedText
+        style={{
+          textAlign: "center",
+          ...FONTS.h3,
+          color: Colors.bodyText,
+        }}
+      >
+        Forgot your password? Enter your email below and we'll send you a quick
+        link to reset it.
+      </ThemedText>
+      <KeyboardAvoidingView style={styles.form} behavior="padding">
         <CustomInput
           label="Email"
           placeholder="Enter Your Email"
@@ -37,33 +58,22 @@ const submitData = () => {
           onChangeText={setEmail}
           iconName="email"
         />
-       
-        <ThemedText
-          type="text4"
-          style={{
-            marginTop: Sizes.padding * 0.5,
-            marginLeft: "auto",
-            color: Colors.primary,
-          }}
-          onPress={() => router.push("/forgotPassword")}
-        >
-          Forgot Password?
-        </ThemedText>
+
+        
 
         <CustomButton title="Send Reset Link" onPress={submitData} />
       </KeyboardAvoidingView>
-
     </View>
-  )
-}
+  );
+};
 
-export default ForgotPassword
+export default ForgotPassword;
 
 const styles = StyleSheet.create({
-     form: {
+  form: {
     width: "100%",
     marginTop: Sizes.padding,
     padding: Sizes.padding,
     borderRadius: Sizes.radius,
   },
-})
+});

@@ -46,7 +46,8 @@ borderWidth: 3,
     marginTop: SCREEN_HEIGHT * 0.02,
     width: '90%',
     justifyContent: 'center',
-    alignSelf:'center'
+    alignSelf:'center',
+    elevation:5
   },
   buttonText: {
     color: Colors.white,

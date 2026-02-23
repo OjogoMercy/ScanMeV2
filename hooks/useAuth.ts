@@ -11,12 +11,13 @@ export function useAuth() {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (u) => {
-      if (u!){
+      if (!u){
         try {
           const result = await signInAnonymously(auth);
           setUser(result.user);
         } catch (err) {
           console.error("Anonymous auth failed", err);
+          setUser(null);
         }
       }else{
         setUser(u);
@@ -27,5 +28,5 @@ export function useAuth() {
     return unsub;
   }, []);
 
-  return { user, loading,isAnonymous : user?.isAnonymous };
+  return { user, loading,isAnonymous : user?.isAnonymous ?? false};
 }

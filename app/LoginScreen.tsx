@@ -7,6 +7,7 @@ import { router } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import {
+  Alert,
   Image,
   KeyboardAvoidingView,
   StatusBar,
@@ -20,18 +21,42 @@ import { Colors, FONTS, Sizes } from "../constants/theme";
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const submitData = async () => {
     if (!email || !password) {
       alert("please fill all the fields");
       return;
     }
+     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      Alert.alert('Invalid Email', 'Please enter a valid email address');
+      return;
+    }
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/(tabs)");
+      // router.push("/(tabs)");
     } catch (error) {
       alert(error.message);
+       switch(error.code){
+      case "auth/user-not-found":
+        Alert.alert("Error", "No user found with this email");
+        break;
+        case "auth/wrong-password":
+          Alert.alert("Error", "Incorrect password");
+          break;
+          case "auth/invalid-email":
+            Alert.alert("Error", "Invalid email address");
+            break;
+              default:
+                Alert.alert(error.message);         
+    } 
+    Alert.alert("Login Failed", "Please check your credentials and try again.");  
+    }finally{ 
+      setLoading(false);
     }
+   
+   
   };
 
   return (
@@ -80,7 +105,7 @@ const LoginScreen = () => {
           Forgot Password?
         </ThemedText>
 
-        <CustomButton title="Sign In" onPress={submitData} />
+        <CustomButton title={loading ? "Signing In..." : "Sign In"} onPress={submitData} />
       </KeyboardAvoidingView>
       <ThemedText type="text4" style={{ marginTop: Sizes.padding }}>
         Don't have an account?{" "}
