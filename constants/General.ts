@@ -65,7 +65,7 @@ borderWidth: 3,
   },
   label: {
     fontSize: SCREEN_WIDTH * 0.035,
-    color: Colors.lightGray,
+    color: Colors.placeholder,
     marginBottom: SCREEN_HEIGHT * 0.008,
   },
   textInput: {
