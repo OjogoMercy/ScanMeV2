@@ -9,7 +9,7 @@ export default function authLayout() {
           animation: "slide_from_right",
           gestureEnabled: true,
         }}
-        initialRouteName="Splash"
+        initialRouteName="SignUp"
       />
     );
 }
