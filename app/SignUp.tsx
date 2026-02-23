@@ -112,6 +112,7 @@ const LoginScreen = () => {
         />
         <CustomButton title="Sign Up" onPress={submitData} />
       </KeyboardAvoidingView>
+      <Text></Text>
     </View>
   );
 };

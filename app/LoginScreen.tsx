@@ -68,7 +68,7 @@ const submitData = async () => {
           onChangeText={setPassword}
         />
 
-        <CustomButton title="Sign In" onPress={() => router.push("/")} />
+        <CustomButton title="Sign In" onPress={submitData} />
       </KeyboardAvoidingView>
     </View>
   );

@@ -54,7 +54,7 @@ const Onboarding1 = () => {
         >
           Tiffy
         </Text>
-        , we instantly recognize and categorize any data; URL'S, WIFI, Emails
+        , she instantly recognizes and categorizes any data; URL'S, WIFI, Emails
         and more in a single tap{" "}
       </Text>
       <View
