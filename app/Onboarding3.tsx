@@ -66,7 +66,7 @@ const Onboarding3 = () => {
             Skip
           </Text>
         </Link>
-        <Link href={"/SignUp"} asChild>
+        <Link href={"/CameraScreen"} asChild>
           <TouchableOpacity>
             <Ionicon
               name="arrow-forward-circle"
