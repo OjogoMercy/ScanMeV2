@@ -173,7 +173,6 @@ const CameraScreen = () => {
       resetScanner();
     }
   };
-
   const resetScanner = () => {
     setScanned(false);
     setLastScannedData("");
@@ -185,7 +184,6 @@ const CameraScreen = () => {
       </View>
     );
   }
-
   if (hasPermission === false) {
     return (
       <View style={general.container}>
