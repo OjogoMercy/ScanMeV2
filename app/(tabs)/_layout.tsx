@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Icon from "@expo/vector-icons/Octicons";
 import { Tabs } from "expo-router";
 import React from "react";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import { CameraIcon as CameraOutline } from "react-native-heroicons/outline";
 import { CameraIcon } from "react-native-heroicons/solid";
 import { Colors, Sizes } from "../../constants/theme";
@@ -31,6 +31,7 @@ export default function TabLayout() {
             duration: 200,
           },
         },
+        tabBarStyle: { height: Platform.OS === "android" ? 70 : 90 },
       }}
     >
       <Tabs.Screen
@@ -38,12 +39,11 @@ export default function TabLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
-          
-              <Icon
-                name={focused ? "home-fill" : "home"}
-                size={focused ? 26 : 24}
-                color={color}
-              />
+            <Icon
+              name={focused ? "home-fill" : "home"}
+              size={focused ? 26 : 24}
+              color={color}
+            />
           ),
         }}
       />
