@@ -1,5 +1,4 @@
 import general from "@/constants/General";
-import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/theme";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Ionicon from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -13,20 +12,20 @@ import {
   Animated,
   Easing,
   Modal,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
+import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/theme";
 const CameraScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [lastScannedData, setLastScannedData] = useState("");
   const [scanned, setScanned] = useState(false);
   const [textModalVisible, setTextModalVisible] = useState(false);
   const [currentText, setCurrentText] = useState("");
-  
+
   const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.7;
   const scanLineAnim = React.useRef(new Animated.Value(0)).current;
   const [flash, setFlash] = useState(false);
@@ -41,7 +40,7 @@ const CameraScreen = () => {
           duration: 1800,
           easing: Easing.linear,
           useNativeDriver: true,
-        })
+        }),
       );
       loop.start();
       return () => loop.stop();
@@ -75,7 +74,7 @@ const CameraScreen = () => {
     Alert.alert(
       "WiFi Network Detected",
       "This app can't automatically connect to WiFi networks for security reasons. Please check your device settings.",
-      [{ text: "OK" }]
+      [{ text: "OK" }],
     );
   };
   const handleBarCodeScanned = async ({ data }) => {
@@ -157,7 +156,7 @@ const CameraScreen = () => {
                 }
               } catch (error) {
                 Haptics.notificationAsync(
-                  Haptics.NotificationFeedbackType.Error
+                  Haptics.NotificationFeedbackType.Error,
                 );
                 Alert.alert("Error", "Unable to perform the action.");
               } finally {
@@ -165,7 +164,7 @@ const CameraScreen = () => {
               }
             },
           },
-        ]
+        ],
       );
     } catch (error) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
@@ -197,15 +196,14 @@ const CameraScreen = () => {
   return (
     <View style={general.container}>
       <CameraView
-        style={StyleSheet.absoluteFillObject}
+        style={StyleSheet.absoluteFill}
         facing="back"
         enableTorch={flash}
-       onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+        onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
         barcodeScannerSettings={{
           barcodeTypes: ["qr", "ean13", "ean8", "code128", "pdf417", "upc_e"],
         }}
       />
-      {/* Overlay */}
       <View style={{ height: "100%", width: "100%" }}>
         <View style={general.overlay}></View>
         <View style={styles.middleRow}>
@@ -241,21 +239,16 @@ const CameraScreen = () => {
             paddingHorizontal: moderateScale(20),
           }}
         >
-          <Link href='/'>
-            <View
-              style={[
-                styles.flash,
-                { backgroundColor:  Colors.primary},
-              ]}
-            >
+          <Link href="/">
+            <View style={[styles.flash, { backgroundColor: Colors.primary }]}>
               <FontAwesome6 name={"xmark"} size={28} color="white" />
-              </View>
+            </View>
           </Link>
           <TouchableOpacity
             onPress={() => setFlash(!flash)}
             style={[
               styles.flash,
-              { backgroundColor: flash ? 'black' : Colors.primary   },
+              { backgroundColor: flash ? "black" : Colors.primary },
             ]}
           >
             <Ionicon
@@ -298,7 +291,7 @@ const CameraScreen = () => {
 export default CameraScreen;
 const styles = StyleSheet.create({
   overlay: {
-    backgroundColor:  "rgba(70, 130, 180, 0.12)" ,
+    backgroundColor: "rgba(70, 130, 180, 0.12)",
     width: SCREEN_WIDTH * 0.18,
     height: SCREEN_HEIGHT * 0.4,
   },
@@ -374,7 +367,7 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(30),
     height: moderateScale(50),
     width: moderateScale(50),
-    justifyContent:'center',
-    alignItems:'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
