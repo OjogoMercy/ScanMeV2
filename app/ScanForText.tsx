@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/theme";
-
+import Ionicon from "@expo/vector-icons";
 const ScanForText = () => {
   const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.7;
   const scanLineAnim = React.useRef(new Animated.Value(0)).current;
@@ -26,10 +26,7 @@ const ScanForText = () => {
         style={StyleSheet.absoluteFill}
         facing="back"
         enableTorch={flash}
-        // onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-        barcodeScannerSettings={{
-          barcodeTypes: ["qr", "ean13", "ean8", "code128", "pdf417", "upc_e"],
-        }}
+        
       />
       <View style={{ height: "100%", width: "100%" }}>
         <View style={general.overlay}></View>

@@ -1,3 +1,4 @@
+import CustomButton from "@/components/CustomButton";
 import general from "@/constants/General";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Ionicon from "@expo/vector-icons/Ionicons";
@@ -5,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Camera, CameraView } from "expo-camera";
 import * as Haptics from "expo-haptics";
 import * as Linking from "expo-linking";
-import { Link } from "expo-router";
+import { Link,  useNavigation, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -18,8 +19,17 @@ import {
   View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/theme";
+import {
+  Colors,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  Sizes,
+} from "../../constants/theme";
+import { ThemedText } from "@/constants/ThemedText";
+
+
 const CameraScreen = () => {
+  const router= useRouter()
   const [hasPermission, setHasPermission] = useState(null);
   const [lastScannedData, setLastScannedData] = useState("");
   const [scanned, setScanned] = useState(false);
@@ -232,11 +242,12 @@ const CameraScreen = () => {
         <View
           style={{
             position: "absolute",
-            bottom: moderateScale(50),
+            bottom: 20,
             width: "100%",
             flexDirection: "row",
             justifyContent: "space-between",
             paddingHorizontal: moderateScale(20),
+            alignItems: "center",
           }}
         >
           <Link href="/">
@@ -244,6 +255,12 @@ const CameraScreen = () => {
               <FontAwesome6 name={"xmark"} size={28} color="white" />
             </View>
           </Link>
+          <Link href={'/ScanForText'} asChild>
+          <TouchableOpacity >
+            <ThemedText type="text4white">Scan For Text</ThemedText>
+          </TouchableOpacity>
+          </Link>
+         
           <TouchableOpacity
             onPress={() => setFlash(!flash)}
             style={[
@@ -259,7 +276,6 @@ const CameraScreen = () => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* Text Modal */}
       <Modal
         visible={textModalVisible}
         animationType="slide"
