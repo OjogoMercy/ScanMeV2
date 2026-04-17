@@ -1,7 +1,7 @@
 import general from "@/constants/General";
 import { FontAwesome6 ,Ionicons} from "@expo/vector-icons";
 import { CameraView } from "expo-camera";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
 import {
   Animated,
@@ -24,6 +24,7 @@ const ScanForText = () => {
   const [scanned, setScanned] = useState(false);
   const CameraRef = useRef<CameraView>(null);
   const [capturing, setCapturing] = useState(false);
+  const router = useRouter()
 
   const handleCapture = async () => {
     if (!CameraRef.current || capturing) return;
@@ -39,12 +40,23 @@ const ScanForText = () => {
         setCapturing(false);
         return;
       }
+      const blocks = result.blocks;
+      const foundText = result.text;
 
       if (!photo?.uri) throw new Error("No image was found ");
+
+      router.push({
+      pathname:"/Review",
+        params:{
+         blocks:encodeURIComponent(JSON.stringify(result.blocks)),
+         foundText:encodeURIComponent(JSON.stringify(result.text))
+        }
+      })
     } catch (error) {
       console.error("Capture error", error);
       setCapturing(false);
     }
+
   };
 
   return (
