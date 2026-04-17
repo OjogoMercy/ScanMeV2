@@ -1,8 +1,8 @@
 import general from "@/constants/General";
-import { FontAwesome6 } from "@expo/vector-icons";
+import { FontAwesome6 ,Ionicons} from "@expo/vector-icons";
 import { CameraView } from "expo-camera";
 import { Link } from "expo-router";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Animated,
   Modal,
@@ -13,20 +13,46 @@ import {
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/theme";
-import Ionicon from "@expo/vector-icons";
+";
+import TextRecognition from "@react-native-ml-kit/text-recognition";
+
 const ScanForText = () => {
   const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.7;
   const scanLineAnim = React.useRef(new Animated.Value(0)).current;
   const [flash, setFlash] = useState(false);
   const [textModalVisible, setTextModalVisible] = useState(false);
   const [scanned, setScanned] = useState(false);
+  const CameraRef = useRef<CameraView>(null);
+  const [capturing, setCapturing] = useState(false);
+
+  const handleCapture = async () => {
+    if (!CameraRef.current || capturing) return;
+    try {
+      setCapturing(true);
+      const photo = await CameraRef.current.takePictureAsync({
+        quality: 0.8,
+        base64: false,
+        skipProcessing: false,
+      });
+      const result = await TextRecognition.recognize(photo.uri);
+      if (!result?.text || result.text.trim() === "") {
+        setCapturing(false);
+        return;
+      }
+
+      if (!photo?.uri) throw new Error("No image was found ");
+    } catch (error) {
+      console.error("Capture error", error);
+      setCapturing(false);
+    }
+  };
+
   return (
     <View style={general.container}>
       <CameraView
         style={StyleSheet.absoluteFill}
         facing="back"
         enableTorch={flash}
-        
       />
       <View style={{ height: "100%", width: "100%" }}>
         <View style={general.overlay}></View>
@@ -75,7 +101,7 @@ const ScanForText = () => {
               { backgroundColor: flash ? "black" : Colors.primary },
             ]}
           >
-            <Ionicon
+            <Ionicons
               name={flash ? "flashlight-outline" : "flashlight"}
               size={28}
               color="white"
