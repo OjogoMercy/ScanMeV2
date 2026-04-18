@@ -15,6 +15,7 @@ import { moderateScale } from "react-native-size-matters";
 import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/theme";
 ";
 import TextRecognition from "@react-native-ml-kit/text-recognition";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ScanForText = () => {
   const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.7;
@@ -35,6 +36,8 @@ const ScanForText = () => {
         base64: false,
         skipProcessing: false,
       });
+      if (!photo?.uri) throw new Error("No image was found ");
+
       const result = await TextRecognition.recognize(photo.uri);
       if (!result?.text || result.text.trim() === "") {
         setCapturing(false);
@@ -43,15 +46,12 @@ const ScanForText = () => {
       const blocks = result.blocks;
       const foundText = result.text;
 
-      if (!photo?.uri) throw new Error("No image was found ");
-
-      router.push({
-      pathname:"/Review",
-        params:{
-         blocks:encodeURIComponent(JSON.stringify(result.blocks)),
-         foundText:encodeURIComponent(JSON.stringify(result.text))
-        }
-      })
+      await AsyncStorage.setItem("pendingResult", JSON.stringify({
+        pendingBlocks:blocks,
+        pendingText:foundText
+      }))
+      router.push("/Review")
+      setCapturing(false)
     } catch (error) {
       console.error("Capture error", error);
       setCapturing(false);
