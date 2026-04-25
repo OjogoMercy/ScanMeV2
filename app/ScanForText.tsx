@@ -1,5 +1,7 @@
 import general from "@/constants/General";
-import { FontAwesome6 ,Ionicons} from "@expo/vector-icons";
+import { FontAwesome6, Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import TextRecognition from "@react-native-ml-kit/text-recognition";
 import { CameraView } from "expo-camera";
 import { Link, useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
@@ -13,9 +15,6 @@ import {
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/theme";
-";
-import TextRecognition from "@react-native-ml-kit/text-recognition";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ScanForText = () => {
   const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.7;
@@ -25,7 +24,7 @@ const ScanForText = () => {
   const [scanned, setScanned] = useState(false);
   const CameraRef = useRef<CameraView>(null);
   const [capturing, setCapturing] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
 
   const handleCapture = async () => {
     if (!CameraRef.current || capturing) return;
@@ -46,17 +45,19 @@ const ScanForText = () => {
       const blocks = result.blocks;
       const foundText = result.text;
 
-      await AsyncStorage.setItem("pendingResult", JSON.stringify({
-        pendingBlocks:blocks,
-        pendingText:foundText
-      }))
-      router.push("/Review")
-      setCapturing(false)
+      await AsyncStorage.setItem(
+        "pendingResult",
+        JSON.stringify({
+          pendingBlocks: blocks,
+          pendingText: foundText,
+        }),
+      );
+      router.push("/Review");
+      setCapturing(false);
     } catch (error) {
       console.error("Capture error", error);
       setCapturing(false);
     }
-
   };
 
   return (
@@ -65,6 +66,8 @@ const ScanForText = () => {
         style={StyleSheet.absoluteFill}
         facing="back"
         enableTorch={flash}
+        ref={CameraRef}
+        onTouchEnd={handleCapture}
       />
       <View style={{ height: "100%", width: "100%" }}>
         <View style={general.overlay}></View>
