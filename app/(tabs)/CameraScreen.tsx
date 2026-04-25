@@ -1,12 +1,12 @@
-import CustomButton from "@/components/CustomButton";
 import general from "@/constants/General";
+import { ThemedText } from "@/constants/ThemedText";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Ionicon from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Camera, CameraView } from "expo-camera";
 import * as Haptics from "expo-haptics";
 import * as Linking from "expo-linking";
-import { Link,  useNavigation, useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   Alert,
@@ -19,17 +19,10 @@ import {
   View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import {
-  Colors,
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-  Sizes,
-} from "../../constants/theme";
-import { ThemedText } from "@/constants/ThemedText";
-
+import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/theme";
 
 const CameraScreen = () => {
-  const router= useRouter()
+  const router = useRouter();
   const [hasPermission, setHasPermission] = useState(null);
   const [lastScannedData, setLastScannedData] = useState("");
   const [scanned, setScanned] = useState(false);
@@ -255,12 +248,12 @@ const CameraScreen = () => {
               <FontAwesome6 name={"xmark"} size={28} color="white" />
             </View>
           </Link>
-          <Link href={'/ScanForText'} asChild>
-          <TouchableOpacity >
-            <ThemedText type="text4white">Scan For Text</ThemedText>
-          </TouchableOpacity>
+          <Link href={"/ScanForText"} asChild>
+            <TouchableOpacity style={styles.link}>
+              <ThemedText type="text4white">Scan For Text</ThemedText>
+            </TouchableOpacity>
           </Link>
-         
+
           <TouchableOpacity
             onPress={() => setFlash(!flash)}
             style={[
@@ -311,6 +304,17 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH * 0.18,
     height: SCREEN_HEIGHT * 0.4,
   },
+  link: {
+    backgroundColor: Colors.primary,
+    paddingVertical: SCREEN_HEIGHT * 0.02,
+    paddingHorizontal: SCREEN_WIDTH * 0.05,
+    borderRadius: SCREEN_WIDTH * 0.06,
+    alignItems: "center",
+    width: "40%",
+    justifyContent: "center",
+    alignSelf: "center",
+    elevation: 5,
+  },
   middleRow: {
     flexDirection: "row",
   },
@@ -347,7 +351,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: moderateScale(14),
   },
-  scanningIndicator: {
+    scanningIndicator: {
     position: "absolute",
     top: moderateScale(50),
     alignSelf: "center",

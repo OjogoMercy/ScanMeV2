@@ -1,12 +1,16 @@
+import CustomButton from "@/components/CustomButton";
 import general from "@/constants/General";
+import { ThemedText } from "@/constants/ThemedText";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TextRecognition from "@react-native-ml-kit/text-recognition";
 import { CameraView } from "expo-camera";
 import { Link, useRouter } from "expo-router";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
+  ActivityIndicator,
   Animated,
+  Easing,
   Modal,
   StyleSheet,
   Text,
@@ -15,6 +19,7 @@ import {
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/theme";
+import * as ImageManipulator from 'expo-image-manipulator';
 
 const ScanForText = () => {
   const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.7;
@@ -24,20 +29,45 @@ const ScanForText = () => {
   const [scanned, setScanned] = useState(false);
   const CameraRef = useRef<CameraView>(null);
   const [capturing, setCapturing] = useState(false);
+  const [scanStatus,setScanStatus] = useState("Capturing Text...")
   const router = useRouter();
+  useEffect(() => {
+    (() => {
+      scanLineAnim.setValue(0);
+      const loop = Animated.loop(
+        Animated.timing(scanLineAnim, {
+          toValue: 1,
+          duration: 1800,
+          easing: Easing.linear,
+          useNativeDriver: true,
+        }),
+      );
+      loop.start();
+      return () => loop.stop();
+    })();
+  }, []);
+
 
   const handleCapture = async () => {
     if (!CameraRef.current || capturing) return;
     try {
       setCapturing(true);
       const photo = await CameraRef.current.takePictureAsync({
-        quality: 0.8,
+        quality: 0.5,
         base64: false,
         skipProcessing: false,
       });
+      const compressedImage = await ImageManipulator.manipulateAsync(
+        photo.uri,
+      [{ resize: { width: 1080 } }],
+      {compress:0.5,format:ImageManipulator.SaveFormat.JPEG}
+
+      )
+      
+
       if (!photo?.uri) throw new Error("No image was found ");
 
-      const result = await TextRecognition.recognize(photo.uri);
+      const result = await TextRecognition.recognize(compressedImage.uri);
       if (!result?.text || result.text.trim() === "") {
         setCapturing(false);
         return;
@@ -69,6 +99,12 @@ const ScanForText = () => {
         ref={CameraRef}
         onTouchEnd={handleCapture}
       />
+      {capturing && (
+        <View style={styles.capturingOverlay}>
+          <ActivityIndicator size="large" color="white" />
+          <ThemedText type="text3white" style={{marginTop:15}}>Capturing Text...</ThemedText>
+        </View>
+      )}
       <View style={{ height: "100%", width: "100%" }}>
         <View style={general.overlay}></View>
         <View style={styles.middleRow}>
@@ -102,6 +138,7 @@ const ScanForText = () => {
             flexDirection: "row",
             justifyContent: "space-between",
             paddingHorizontal: moderateScale(20),
+            alignItems: "center",
           }}
         >
           <Link href="/">
@@ -109,6 +146,12 @@ const ScanForText = () => {
               <FontAwesome6 name={"xmark"} size={28} color="white" />
             </View>
           </Link>
+
+          <CustomButton
+            title="Scan"
+            onPress={handleCapture}
+            buttonStyle={{ width: SCREEN_WIDTH * 0.35 }}
+          />
           <TouchableOpacity
             onPress={() => setFlash(!flash)}
             style={[
@@ -233,5 +276,16 @@ const styles = StyleSheet.create({
     width: moderateScale(50),
     justifyContent: "center",
     alignItems: "center",
+  },
+  capturingOverlay: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: "rgba(0,0,0,0.7)",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 });

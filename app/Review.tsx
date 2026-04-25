@@ -1,5 +1,4 @@
 import CustomButton from "@/components/CustomButton";
-import { Colors } from "@/constants/Theme";
 import { ThemedText } from "@/constants/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -13,6 +12,7 @@ import {
   View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
+import { Colors, SCREEN_WIDTH, Sizes } from "../constants/theme";
 
 const Review = () => {
   const [extractedText, setExtractedText] = useState("");
@@ -104,9 +104,9 @@ const Review = () => {
             navigation.goBack();
           }}
         >
-          <Ionicons name="arrow-back" size={24} color={Colors.primary} />
+          <Ionicons name="arrow-back" size={26} color={Colors.primary} />
         </TouchableOpacity>
-        <ThemedText type="text3bold">Review Scanned Text</ThemedText>
+        <ThemedText type="text2">Review Scanned Text</ThemedText>
       </View>
 
       <ThemedText style={styles.instruction}>
@@ -146,16 +146,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: moderateScale(16),
-    backgroundColor: "white",
+    backgroundColor: "rgb(250, 247, 247)",
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     gap: moderateScale(12),
-    marginBottom: moderateScale(16),
+    marginVertical: moderateScale(16),
   },
   instruction: {
-    color: Colors.gray,
+    color: Colors.black,
     marginBottom: moderateScale(12),
   },
   textInput: {
@@ -170,14 +170,13 @@ const styles = StyleSheet.create({
   },
   charCount: {
     textAlign: "right",
-    color: Colors.gray,
+    color: Colors.black,
     fontSize: moderateScale(12),
     marginBottom: moderateScale(16),
   },
   actions: {
-    flexDirection: "row",
-    gap: moderateScale(12),
-    paddingBottom: moderateScale(24),
+    width: SCREEN_WIDTH * 0.9,
+    paddingBottom: Sizes.base,
   },
   discardButton: {
     flex: 1,
