@@ -4,12 +4,14 @@ import { ThemedText } from "@/constants/ThemedText";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TextRecognition from "@react-native-ml-kit/text-recognition";
-import { CameraView } from "expo-camera";
-import { Link, useRouter } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import * as ImageManipulator from "expo-image-manipulator";
+import { Link, useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Animated,
+  AppState,
   Easing,
   Modal,
   StyleSheet,
@@ -18,20 +20,30 @@ import {
   View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/theme";
-import * as ImageManipulator from 'expo-image-manipulator';
+import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH, Sizes } from "../constants/theme";
 
 const ScanForText = () => {
   const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.7;
+  const SCAN_BOX_WIDTH = SCREEN_WIDTH * 0.85;
+  const SCAN_BOX_HEIGHT = SCREEN_HEIGHT * 0.25;
   const scanLineAnim = React.useRef(new Animated.Value(0)).current;
   const [flash, setFlash] = useState(false);
   const [textModalVisible, setTextModalVisible] = useState(false);
   const [scanned, setScanned] = useState(false);
+  const [cameraActive, setCameraActive] = useState(true);
   const CameraRef = useRef<CameraView>(null);
   const [capturing, setCapturing] = useState(false);
-  const [scanStatus,setScanStatus] = useState("Capturing Text...")
+  const [scanStatus, setScanStatus] = useState("Capturing Text...");
+  const [permission, requestPermission] = useCameraPermissions();
   const router = useRouter();
   useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState === "active") {
+        setCameraActive(true);
+      } else {
+        setCameraActive(false);
+      }
+    });
     (() => {
       scanLineAnim.setValue(0);
       const loop = Animated.loop(
@@ -45,13 +57,23 @@ const ScanForText = () => {
       loop.start();
       return () => loop.stop();
     })();
+    return () => subscription.remove();
   }, []);
-
+  useFocusEffect(
+    useCallback(() => {
+      setCameraActive(true);
+      return () => {
+        setCameraActive(false);
+      };
+    }, []),
+  );
+  console.log("CAMERA PERMISSIONS ", permission);
 
   const handleCapture = async () => {
     if (!CameraRef.current || capturing) return;
     try {
       setCapturing(true);
+      setScanStatus("Capturing Text...");
       const photo = await CameraRef.current.takePictureAsync({
         quality: 0.5,
         base64: false,
@@ -59,19 +81,18 @@ const ScanForText = () => {
       });
       const compressedImage = await ImageManipulator.manipulateAsync(
         photo.uri,
-      [{ resize: { width: 1080 } }],
-      {compress:0.5,format:ImageManipulator.SaveFormat.JPEG}
-
-      )
-      
+        [{ resize: { width: 1080 } }],
+        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG },
+      );
 
       if (!photo?.uri) throw new Error("No image was found ");
-
+      setScanStatus("Reading text...");
       const result = await TextRecognition.recognize(compressedImage.uri);
       if (!result?.text || result.text.trim() === "") {
         setCapturing(false);
         return;
       }
+      setScanStatus("Processing...");
       const blocks = result.blocks;
       const foundText = result.text;
 
@@ -97,12 +118,14 @@ const ScanForText = () => {
         facing="back"
         enableTorch={flash}
         ref={CameraRef}
-        onTouchEnd={handleCapture}
+        active={cameraActive}
       />
       {capturing && (
         <View style={styles.capturingOverlay}>
           <ActivityIndicator size="large" color="white" />
-          <ThemedText type="text3white" style={{marginTop:15}}>Capturing Text...</ThemedText>
+          <ThemedText type="text3white" style={{ marginTop: 15 }}>
+            {scanStatus}
+          </ThemedText>
         </View>
       )}
       <View style={{ height: "100%", width: "100%" }}>
@@ -118,7 +141,7 @@ const ScanForText = () => {
                     {
                       translateY: scanLineAnim.interpolate({
                         inputRange: [0, 1],
-                        outputRange: [0, SCAN_BOX_SIZE - 2],
+                        outputRange: [0, SCAN_BOX_HEIGHT - 2],
                       }),
                     },
                   ],
@@ -132,15 +155,21 @@ const ScanForText = () => {
         <View style={general.overlay}></View>
         <View
           style={{
+            padding: Sizes.padding,
+            backgroundColor: "white",
             position: "absolute",
-            bottom: moderateScale(50),
-            width: "100%",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            paddingHorizontal: moderateScale(20),
-            alignItems: "center",
+            bottom: 115,
+            alignSelf: "center",
+            borderRadius: Sizes.radius,
           }}
         >
+          <ThemedText>
+            {" "}
+            Works best with printed text. For handwriting, ensure good lighting
+            and hold steady.
+          </ThemedText>
+        </View>
+        <View style={styles.bottom}>
           <Link href="/">
             <View style={[styles.flash, { backgroundColor: Colors.primary }]}>
               <FontAwesome6 name={"xmark"} size={28} color="white" />
@@ -287,5 +316,16 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  bottom: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: Sizes.navTitle,
+    alignItems: "center",
+    backgroundColor: "white",
+    paddingHorizontal: Sizes.padding,
   },
 });

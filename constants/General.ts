@@ -23,18 +23,18 @@ const general = StyleSheet.create({
     color: Colors.black,
   },
   overlay: {
-    height: SCREEN_HEIGHT * 0.35,
+    height: SCREEN_HEIGHT * 0.3,
     width: SCREEN_WIDTH * 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor:  "rgba(70, 130, 180, 0.12)" ,
+    backgroundColor: "rgba(70, 130, 180, 0.12)",
   },
   overlayCam: {
     height: SCREEN_HEIGHT * 0.4,
     width: SCREEN_WIDTH * 0.7,
     opacity: 0.7,
- borderColor: 'rgba(70,130,180,0.45)',
-borderWidth: 3,
+    borderColor: "rgba(70,130,180,0.45)",
+    borderWidth: 3,
     flex: 1,
   },
   button: {
@@ -44,15 +44,15 @@ borderWidth: 3,
     borderRadius: SCREEN_WIDTH * 0.06,
     alignItems: "center",
     marginTop: SCREEN_HEIGHT * 0.02,
-    width: '90%',
-    justifyContent: 'center',
-    alignSelf:'center',
-    elevation:5
+    width: "90%",
+    justifyContent: "center",
+    alignSelf: "center",
+    elevation: 5,
   },
   buttonText: {
     color: Colors.white,
     fontWeight: "bold",
-    textAlign:'center'
+    textAlign: "center",
   },
   input: {
     borderRadius: SCREEN_WIDTH * 0.02,

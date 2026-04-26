@@ -2,7 +2,7 @@ import CustomButton from "@/components/CustomButton";
 import { ThemedText } from "@/constants/ThemedText";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -18,7 +18,7 @@ const Review = () => {
   const [extractedText, setExtractedText] = useState("");
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const navigation = useNavigation();
+  const router = useRouter();
   const cleanText = (raw: string) => {
     return raw
       .split("\n")
@@ -69,8 +69,9 @@ const Review = () => {
 
       await AsyncStorage.setItem("scanHistory", JSON.stringify(updatedHistory));
       clearPending();
-      navigation.navigate("History");
+      router.push("History");
     } catch (error) {
+      clearPending();
       console.log("Error saving to history:", error);
     }
   };
@@ -84,13 +85,15 @@ const Review = () => {
           justifyContent: "center",
           alignItems: "center",
           backgroundColor: "white",
+          flex: 1,
+          padding: Sizes.padding,
         }}
       >
         <ThemedText type="text3bold" style={{ color: Colors.primary }}>
           {" "}
           Could not load scanned text. Please try again.
         </ThemedText>
-        <CustomButton title="Go Back" onPress={() => navigation.goBack()} />
+        <CustomButton title="Go Back" onPress={() => router.back()} />
       </View>
     );
   }
@@ -101,7 +104,7 @@ const Review = () => {
         <TouchableOpacity
           onPress={async () => {
             await clearPending();
-            navigation.goBack();
+            router.back();
           }}
         >
           <Ionicons name="arrow-back" size={26} color={Colors.primary} />
@@ -131,7 +134,7 @@ const Review = () => {
           title="Discard"
           onPress={async () => {
             await clearPending();
-            navigation.goBack();
+            router.back();
           }}
         />
         <CustomButton title="Save to History" onPress={handleSave} />

@@ -6,11 +6,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Camera, CameraView } from "expo-camera";
 import * as Haptics from "expo-haptics";
 import * as Linking from "expo-linking";
-import { Link, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { Link, useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Alert,
   Animated,
+  AppState,
   Easing,
   Modal,
   StyleSheet,
@@ -28,11 +29,20 @@ const CameraScreen = () => {
   const [scanned, setScanned] = useState(false);
   const [textModalVisible, setTextModalVisible] = useState(false);
   const [currentText, setCurrentText] = useState("");
+  const [cameraActive, setCameraActive] = useState(true);
 
   const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.7;
   const scanLineAnim = React.useRef(new Animated.Value(0)).current;
   const [flash, setFlash] = useState(false);
   useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState === "active") {
+        setCameraActive(true);
+      } else {
+        setCameraActive(false);
+      }
+    });
+
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
@@ -48,7 +58,16 @@ const CameraScreen = () => {
       loop.start();
       return () => loop.stop();
     })();
+    return () => subscription.remove();
   }, []);
+  useFocusEffect(
+    useCallback(() => {
+      setCameraActive(true);
+      return () => {
+        setCameraActive(false);
+      };
+    }, []),
+  );
 
   // to Save scan to history
   const saveToHistory = async (scanData: any, type: string) => {
@@ -198,15 +217,17 @@ const CameraScreen = () => {
   }
   return (
     <View style={general.container}>
-      <CameraView
-        style={StyleSheet.absoluteFill}
-        facing="back"
-        enableTorch={flash}
-        onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-        barcodeScannerSettings={{
-          barcodeTypes: ["qr", "ean13", "ean8", "code128", "pdf417", "upc_e"],
-        }}
-      />
+      {cameraActive && (
+        <CameraView
+          style={StyleSheet.absoluteFill}
+          facing="back"
+          enableTorch={flash}
+          onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+          barcodeScannerSettings={{
+            barcodeTypes: ["qr", "ean13", "ean8", "code128", "pdf417", "upc_e"],
+          }}
+        />
+      )}
       <View style={{ height: "100%", width: "100%" }}>
         <View style={general.overlay}></View>
         <View style={styles.middleRow}>
@@ -351,7 +372,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: moderateScale(14),
   },
-    scanningIndicator: {
+  scanningIndicator: {
     position: "absolute",
     top: moderateScale(50),
     alignSelf: "center",

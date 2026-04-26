@@ -10,20 +10,17 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (loading) return;
-    const inAuthScreens =
-      segments[0] === "(authscreens)"
+    const inAuthScreens = segments[0] === "(authscreens)";
 
-      if( user && !inAuthScreens && segments.length > 0  ){
-        return;
+    if (user && !inAuthScreens && segments.length > 0) {
+      return;
     } else if (user && inAuthScreens) {
       router.replace("/(tabs)");
-    } 
-      
-
-  }, [user,loading,segments]);
-   if(loading){
-      return<Splash/>
     }
+  }, [user, loading, segments]);
+  if (loading) {
+    return <Splash />;
+  }
 
   if (loading) {
     return null;
@@ -32,8 +29,8 @@ export default function RootLayout() {
       <Stack
         screenOptions={{
           headerShown: false,
-          animation: "slide_from_right",
           gestureEnabled: true,
+          animation: "none",
         }}
         initialRouteName="Splash"
       />
