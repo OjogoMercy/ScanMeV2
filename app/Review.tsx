@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: moderateScale(16),
-    backgroundColor: "rgb(250, 247, 247)",
+    backgroundColor: Colors.offWhite,
   },
   header: {
     flexDirection: "row",
@@ -164,12 +164,13 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 1,
     borderWidth: 1,
-    borderColor: Colors.primary,
+    borderColor: Colors.black,
     borderRadius: moderateScale(12),
     padding: moderateScale(12),
     fontSize: moderateScale(14),
-    color: Colors.primary,
+    color: Colors.black,
     marginBottom: moderateScale(8),
+    backgroundColor: Colors.white,
   },
   charCount: {
     textAlign: "right",

@@ -68,6 +68,7 @@ const ScanForText = () => {
     }, []),
   );
   console.log("CAMERA PERMISSIONS ", permission);
+  console.log("is camera active ", cameraActive);
 
   const handleCapture = async () => {
     if (!CameraRef.current || capturing) return;
@@ -112,7 +113,7 @@ const ScanForText = () => {
   };
 
   return (
-    <View style={general.container}>
+    <View style={[general.container, { backgroundColor: "transparent" }]}>
       <CameraView
         style={StyleSheet.absoluteFill}
         facing="back"
@@ -128,7 +129,14 @@ const ScanForText = () => {
           </ThemedText>
         </View>
       )}
-      <View style={{ height: "100%", width: "100%" }}>
+      <View
+        style={{
+          height: "100%",
+          width: "100%",
+          backgroundColor: "transparent",
+          position: "absolute",
+        }}
+      >
         <View style={general.overlay}></View>
         <View style={styles.middleRow}>
           <View style={styles.overlay} />

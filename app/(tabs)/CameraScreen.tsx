@@ -3,7 +3,7 @@ import { ThemedText } from "@/constants/ThemedText";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Ionicon from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Camera, CameraView } from "expo-camera";
+import { Camera, CameraView, useCameraPermissions } from "expo-camera";
 import * as Haptics from "expo-haptics";
 import * as Linking from "expo-linking";
 import { Link, useFocusEffect, useRouter } from "expo-router";
@@ -24,7 +24,7 @@ import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/theme";
 
 const CameraScreen = () => {
   const router = useRouter();
-  const [hasPermission, setHasPermission] = useState(null);
+  const [hasPermission, setHasPermission] = useCameraPermissions();
   const [lastScannedData, setLastScannedData] = useState("");
   const [scanned, setScanned] = useState(false);
   const [textModalVisible, setTextModalVisible] = useState(false);
@@ -42,7 +42,8 @@ const CameraScreen = () => {
         setCameraActive(false);
       }
     });
-
+    console.log("Camera Permission", hasPermission);
+    console.log("isCamera Active ", cameraActive);
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
