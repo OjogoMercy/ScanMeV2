@@ -119,7 +119,6 @@ const ScanForText = () => {
         facing="back"
         enableTorch={flash}
         ref={CameraRef}
-        active={cameraActive}
       />
       {capturing && (
         <View style={styles.capturingOverlay}>
