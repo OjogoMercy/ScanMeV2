@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.black,
     borderRadius: moderateScale(12),
     padding: moderateScale(12),
-    fontSize: moderateScale(14),
+    fontSize: 16,
     color: Colors.black,
     marginBottom: moderateScale(8),
     backgroundColor: Colors.white,
