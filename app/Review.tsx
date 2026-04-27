@@ -61,6 +61,8 @@ const Review = () => {
         type: "text",
         timestamp: new Date().toISOString(),
         favourite: false,
+        title:scanTitle,
+        uri:pendingUri
       };
 
       const existingHistory = await AsyncStorage.getItem("scanHistory");

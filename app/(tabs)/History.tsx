@@ -31,6 +31,8 @@ interface ScanData {
   type: string;
   timestamp: string;
   favorite: boolean;
+  title?: string;
+  uri?: string;
 }
 
 const History = () => {
@@ -178,7 +180,9 @@ const History = () => {
         <FlatList
           data={filteredData}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item, index }) => (
+          renderItem={({ item, index }) => {
+            const displayTitle = item.title || item.data.substring(0, 30)
+            return(           
             <MotiView
               style={styles.historyItem}
               key={item.id}
@@ -230,7 +234,8 @@ const History = () => {
                 </TouchableOpacity>
               </View>
             </MotiView>
-          )}
+            )
+          }}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={
             filteredData.length === 0
