@@ -80,7 +80,7 @@ const ScanForText = () => {
       if (timeSinceInteraction > 7000 && cameraActive) {
         remountCamera();
       }
-    }, 8000);
+    }, 9000);
     return () => clearInterval(interval);
   }, [cameraActive]);
   useFocusEffect(
