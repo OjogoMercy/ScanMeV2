@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import TextRecognition from "@react-native-ml-kit/text-recognition";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as ImageManipulator from "expo-image-manipulator";
-import { Link, useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -20,7 +20,12 @@ import {
   View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH, Sizes } from "../../constants/theme";
+import {
+  Colors,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  Sizes,
+} from "../../constants/theme";
 
 const ScanForText = () => {
   const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.7;
@@ -75,7 +80,7 @@ const ScanForText = () => {
       if (timeSinceInteraction > 7000 && cameraActive) {
         remountCamera();
       }
-    },8000);
+    }, 8000);
     return () => clearInterval(interval);
   }, [cameraActive]);
   useFocusEffect(
@@ -219,11 +224,11 @@ const ScanForText = () => {
           </ThemedText>
         </View>
         <View style={styles.bottom}>
-          <Link href="/">
+          <TouchableOpacity onPress={() => router.back()}>
             <View style={[styles.flash, { backgroundColor: Colors.primary }]}>
-              <FontAwesome6 name={"xmark"} size={28} color="white" />
+              <FontAwesome6 name="xmark" size={22} color="white" />
             </View>
-          </Link>
+          </TouchableOpacity>
 
           <CustomButton
             title="Scan"
@@ -238,7 +243,7 @@ const ScanForText = () => {
             ]}
           >
             <Ionicons
-              name={flash ? "flashlight-outline" : "flashlight"}
+              name={flash ? "flashlight" : "flashlight-outline"}
               size={28}
               color="white"
             />
@@ -368,13 +373,15 @@ const styles = StyleSheet.create({
   },
   bottom: {
     position: "absolute",
-    bottom: 0,
-    width: "100%",
+    bottom: 10,
+    width: "90%",
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: Sizes.navTitle,
+    paddingVertical: Sizes.base,
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "rgba(247, 239, 239, 0.5)",
     paddingHorizontal: Sizes.padding,
+    borderRadius: 26,
+    alignSelf: "center",
   },
 });

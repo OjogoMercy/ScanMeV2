@@ -20,7 +20,7 @@ import {
   View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../../constants/theme";
+import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/theme";
 
 const CameraScreen = () => {
   const router = useRouter();

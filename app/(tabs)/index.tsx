@@ -92,7 +92,7 @@ const formatTime = (timestamp: string) => {
   return `${diffDays} days ago`;
 };
 
-export default function index() {
+export default function Index() {
   const [recentScans, setRecentScans] = useState<ScanItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -104,7 +104,7 @@ export default function index() {
           const history = await AsyncStorage.getItem("scanHistory");
           if (history) {
             const parsed: ScanItem[] = JSON.parse(history);
-            setRecentScans(parsed.slice(0, 3));
+            setRecentScans(parsed.slice(0, 5));
           }
         } catch (error) {
           console.error("Error loading recent scans:", error);
@@ -150,11 +150,11 @@ export default function index() {
   };
 
   return (
-    <View style={[general.container, { backgroundColor: Colors.background }]}>
+    <View style={[general.container, { backgroundColor: Colors.background,alignContent:"stretch" }]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
 
       <View style={styles.header}>
-        <ThemedText type="text5" style={{ color: Colors.bodyText }}>
+        <ThemedText type="text3" style={{ color: Colors.bodyText }}>
           {getGreeting()}
         </ThemedText>
         <ThemedText type="text1bold">What are you scanning?</ThemedText>
@@ -191,7 +191,7 @@ export default function index() {
         >
           <View style={styles.cardIcon}>
             <Ionicons
-              name="text"
+              name="document-text"
               size={moderateScale(26)}
               color={Colors.white}
             />
@@ -250,6 +250,9 @@ export default function index() {
           />
         )}
       </View>
+      <TouchableOpacity style={styles.floatingButton} onPress={() => router.push("CameraScreen")}>
+        <Ionicons name="add" size={36} color={'white'}/>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -257,7 +260,6 @@ export default function index() {
 const styles = StyleSheet.create({
   header: {
     paddingHorizontal: Sizes.padding,
-    paddingTop: Sizes.navTitle,
     paddingBottom: Sizes.base,
     gap: moderateScale(4),
   },
@@ -277,7 +279,7 @@ const styles = StyleSheet.create({
   },
   cardIcon: {
     width: moderateScale(40),
-    height: moderateScale(40),
+    height: moderateScale(50),
     borderRadius: moderateScale(10),
     backgroundColor: "rgba(255,255,255,0.15)",
     justifyContent: "center",
@@ -285,11 +287,12 @@ const styles = StyleSheet.create({
     marginBottom: moderateScale(4),
   },
   section: {
-    flex: 1,
     backgroundColor: Colors.white,
-    borderRadius: moderateScale(20),
+   borderRadius:Sizes.padding,
     marginHorizontal: Sizes.padding,
     padding: Sizes.padding,
+    width:SCREEN_WIDTH*0.9,
+    marginTop:Sizes.navTitle,
   },
   sectionHeader: {
     flexDirection: "row",
@@ -301,7 +304,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: moderateScale(12),
-    paddingVertical: moderateScale(10),
+    paddingVertical: Sizes.padding,
   },
   itemIcon: {
     width: moderateScale(42),
@@ -330,4 +333,17 @@ const styles = StyleSheet.create({
     gap: moderateScale(12),
     paddingVertical: moderateScale(40),
   },
+  floatingButton:{
+    backgroundColor:Colors.primary,
+    alignSelf:'flex-end',
+    margin:Sizes.padding,
+    width:moderateScale(55),
+    height:moderateScale(55),
+    borderRadius:30,
+    alignItems:'center',
+    justifyContent:'center',
+    elevation:5,
+    position :'absolute',
+    bottom:20
+  }
 });

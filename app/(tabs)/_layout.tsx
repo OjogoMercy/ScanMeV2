@@ -1,8 +1,7 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import Icon from "@expo/vector-icons/Octicons";
 import { Tabs } from "expo-router";
 import React from "react";
-import { Platform, View } from "react-native";
+import { Platform } from "react-native";
 import { Colors, Sizes } from "../../constants/theme";
 
 export default function TabLayout() {
@@ -37,16 +36,24 @@ export default function TabLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
-            <MaterialIcons name="document-scanner" size={focused ? 24:26} color={color} />
+            <MaterialIcons
+              name="document-scanner"
+              size={focused ? 24 : 26}
+              color={color}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="CameraScreen"
+        name="ScanForText"
         options={{
           title: "Scan",
           tabBarIcon: ({ color, focused }) => (
-           <MaterialIcons name="qr-code-scanner" size={focused ? 24:26} color={color} />
+            <MaterialIcons
+              name="qr-code-scanner"
+              size={focused ? 24 : 26}
+              color={color}
+            />
           ),
         }}
       />
