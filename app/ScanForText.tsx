@@ -35,38 +35,56 @@ const ScanForText = () => {
   const [capturing, setCapturing] = useState(false);
   const [scanStatus, setScanStatus] = useState("Capturing Text...");
   const [permission, requestPermission] = useCameraPermissions();
+  const [cameraKey, setCameraKey] = useState(0);
   const router = useRouter();
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (nextAppState === "active") {
-        setCameraActive(true);
-      } else {
-        setCameraActive(false);
-      }
-    });
-    (() => {
-      scanLineAnim.setValue(0);
-      const loop = Animated.loop(
-        Animated.timing(scanLineAnim, {
-          toValue: 1,
-          duration: 1800,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        }),
-      );
-      loop.start();
-      return () => loop.stop();
-    })();
-    return () => subscription.remove();
-  }, []);
+
+useEffect(() => {
+  const subscription = AppState.addEventListener("change", (nextAppState) => {
+    if (nextAppState === "active") {
+      setCameraActive(true)
+      remountCamera()
+    } else {
+      setCameraActive(false)
+    }
+  })
+  return () => subscription.remove()
+}, [])  
+
+useEffect(() => {
+  scanLineAnim.setValue(0)
+  const loop = Animated.loop(
+    Animated.timing(scanLineAnim, {
+      toValue: 1,
+      duration: 1800,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    })
+  )
+  loop.start()
+  return () => loop.stop()
+}, []) 
+  const remountCamera = () => {
+    setCameraKey((prev) => prev + 1);
+  };
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    if (cameraActive && CameraRef.current) {
+      remountCamera()
+    }
+  }, 15000) 
+  return () => clearInterval(interval)
+}, [cameraActive])
   useFocusEffect(
     useCallback(() => {
+      remountCamera();
       setCameraActive(true);
       return () => {
         setCameraActive(false);
       };
     }, []),
   );
+
   console.log("CAMERA PERMISSIONS ", permission);
   console.log("is camera active ", cameraActive);
 
@@ -115,10 +133,12 @@ const ScanForText = () => {
   return (
     <View style={[general.container, { backgroundColor: "transparent" }]}>
       <CameraView
+        key={cameraKey}
         style={StyleSheet.absoluteFill}
         facing="back"
         enableTorch={flash}
         ref={CameraRef}
+        active={cameraActive}
       />
       {capturing && (
         <View style={styles.capturingOverlay}>

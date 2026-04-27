@@ -42,8 +42,7 @@ const CameraScreen = () => {
         setCameraActive(false);
       }
     });
-    console.log("Camera Permission", hasPermission);
-    console.log("isCamera Active ", cameraActive);
+
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
