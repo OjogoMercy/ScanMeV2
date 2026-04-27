@@ -1,10 +1,8 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import Icon from "@expo/vector-icons/Octicons";
 import { Tabs } from "expo-router";
 import React from "react";
 import { Platform, View } from "react-native";
-import { CameraIcon as CameraOutline } from "react-native-heroicons/outline";
-import { CameraIcon } from "react-native-heroicons/solid";
 import { Colors, Sizes } from "../../constants/theme";
 
 export default function TabLayout() {
@@ -39,11 +37,7 @@ export default function TabLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
-            <Icon
-              name={focused ? "home-fill" : "home"}
-              size={focused ? 26 : 24}
-              color={color}
-            />
+            <MaterialIcons name="document-scanner" size={focused ? 24:26} color={color} />
           ),
         }}
       />
@@ -52,21 +46,7 @@ export default function TabLayout() {
         options={{
           title: "Scan",
           tabBarIcon: ({ color, focused }) => (
-            <View
-              style={[
-                iconContainerStyle,
-                {
-                  backgroundColor: focused ? Colors.offWhite : Colors.offWhite,
-                  borderRadius: Sizes.padding * 2,
-                },
-              ]}
-            >
-              {focused ? (
-                <CameraIcon color={color} size={30} />
-              ) : (
-                <CameraOutline color={color} size={24} />
-              )}
-            </View>
+           <MaterialIcons name="qr-code-scanner" size={focused ? 24:26} color={color} />
           ),
         }}
       />
@@ -79,7 +59,7 @@ export default function TabLayout() {
             <Ionicons
               name={focused ? "time" : "time-outline"}
               color={color}
-              size={focused ? 30 : 24}
+              size={focused ? 24 : 26}
             />
           ),
         }}

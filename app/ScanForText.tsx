@@ -20,7 +20,7 @@ import {
   View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH, Sizes } from "../constants/theme";
+import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH, Sizes } from "../../constants/theme";
 
 const ScanForText = () => {
   const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.7;
@@ -36,45 +36,48 @@ const ScanForText = () => {
   const [scanStatus, setScanStatus] = useState("Capturing Text...");
   const [permission, requestPermission] = useCameraPermissions();
   const [cameraKey, setCameraKey] = useState(0);
+  const [cameraReady, setCameraReady] = useState(false);
   const router = useRouter();
 
-useEffect(() => {
-  const subscription = AppState.addEventListener("change", (nextAppState) => {
-    if (nextAppState === "active") {
-      setCameraActive(true)
-      remountCamera()
-    } else {
-      setCameraActive(false)
-    }
-  })
-  return () => subscription.remove()
-}, [])  
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState === "active") {
+        setCameraActive(true);
+        remountCamera();
+      } else {
+        setCameraActive(false);
+      }
+    });
+    return () => subscription.remove();
+  }, []);
 
-useEffect(() => {
-  scanLineAnim.setValue(0)
-  const loop = Animated.loop(
-    Animated.timing(scanLineAnim, {
-      toValue: 1,
-      duration: 1800,
-      easing: Easing.linear,
-      useNativeDriver: true,
-    })
-  )
-  loop.start()
-  return () => loop.stop()
-}, []) 
+  useEffect(() => {
+    scanLineAnim.setValue(0);
+    const loop = Animated.loop(
+      Animated.timing(scanLineAnim, {
+        toValue: 1,
+        duration: 1800,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }),
+    );
+    loop.start();
+    return () => loop.stop();
+  }, []);
   const remountCamera = () => {
     setCameraKey((prev) => prev + 1);
   };
+  const lastInterractionRef = useRef(Date.now());
 
-useEffect(() => {
-  const interval = setInterval(() => {
-    if (cameraActive && CameraRef.current) {
-      remountCamera()
-    }
-  }, 15000) 
-  return () => clearInterval(interval)
-}, [cameraActive])
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const timeSinceInteraction = Date.now() - lastInterractionRef.current;
+      if (timeSinceInteraction > 7000 && cameraActive) {
+        remountCamera();
+      }
+    },8000);
+    return () => clearInterval(interval);
+  }, [cameraActive]);
   useFocusEffect(
     useCallback(() => {
       remountCamera();
@@ -89,6 +92,7 @@ useEffect(() => {
   console.log("is camera active ", cameraActive);
 
   const handleCapture = async () => {
+    lastInterractionRef.current = Date.now();
     if (!CameraRef.current || capturing) return;
     try {
       setCapturing(true);
@@ -129,6 +133,14 @@ useEffect(() => {
       setCapturing(false);
     }
   };
+  if (!permission?.granted) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ThemedText>Camera permission required</ThemedText>
+        <CustomButton title="Grant Permission" onPress={requestPermission} />
+      </View>
+    );
+  }
 
   return (
     <View style={[general.container, { backgroundColor: "transparent" }]}>
@@ -139,7 +151,17 @@ useEffect(() => {
         enableTorch={flash}
         ref={CameraRef}
         active={cameraActive}
+        onCameraReady={() => {
+          setCameraReady(true);
+          console.log("camera ready");
+        }}
       />
+      {!cameraReady && (
+        <View style={styles.capturingOverlay}>
+          <ActivityIndicator color="white" size="large" />
+          <ThemedText type="text3white">Starting camera...</ThemedText>
+        </View>
+      )}
       {capturing && (
         <View style={styles.capturingOverlay}>
           <ActivityIndicator size="large" color="white" />
