@@ -1,12 +1,12 @@
 import general from "@/constants/General";
 import { ThemedText } from "@/constants/ThemedText";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import Ionicon from "@expo/vector-icons/Ionicons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Camera, CameraView, useCameraPermissions } from "expo-camera";
 import * as Haptics from "expo-haptics";
 import * as Linking from "expo-linking";
-import { Link, useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   Alert,
@@ -21,7 +21,6 @@ import {
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH, Sizes } from "../constants/theme";
-import Ionicons from "@expo/vector-icons/Ionicons";
 
 const CameraScreen = () => {
   const router = useRouter();
@@ -229,53 +228,82 @@ const CameraScreen = () => {
           }}
         />
       )}
-      <View style={{ height: "100%", width: "100%" }}>
-        <View style={general.overlay}></View>
-        <View style={styles.middleRow}>
-          <View style={styles.overlay} />
-          <View style={general.overlayCam}>
-            <Animated.View
-              style={[
-                styles.scanLine,
-                {
-                  transform: [
-                    {
-                      translateY: scanLineAnim.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0, SCAN_BOX_SIZE - 2],
-                      }),
-                    },
-                  ],
-                },
-              ]}
-            />
-          </View>
-          <View style={styles.overlay} />
-        </View>
+      <View style={styles.topPanel} />
 
-        <View style={general.overlay}></View>
-           <View style={styles.bottom}>
-          <TouchableOpacity onPress={() => router.back()}>
-            <View style={[styles.flash, { backgroundColor: Colors.primary }]}>
-              <FontAwesome6 name="xmark" size={20} color="white" />
-            </View>
-          </TouchableOpacity>
+      <View
+        style={[
+          styles.middleRow,
+          {
+            height: SCAN_BOX_SIZE,
+            transform: [{ translateY: -SCAN_BOX_SIZE / 2 }],
+          },
+        ]}
+      >
+        <View style={{ flex: 1, backgroundColor: "rgba(10, 20, 35, 0.5)" }} />
 
-          
-          <TouchableOpacity
-            onPress={() => setFlash(!flash)}
+        <View
+          style={{
+            width: SCAN_BOX_SIZE,
+            height: SCAN_BOX_SIZE,
+            backgroundColor: "transparent",
+          }}
+        >
+          <View style={[styles.corner, styles.topLeft]} />
+          <View style={[styles.corner, styles.topRight]} />
+          <View style={[styles.corner, styles.bottomLeft]} />
+          <View style={[styles.corner, styles.bottomRight]} />
+          <Animated.View
             style={[
-              styles.flash,
-              { backgroundColor: flash ? Colors.primary : "rgba(232, 241, 255,0.2)" },
+              styles.scanLine,
+              {
+                transform: [
+                  {
+                    translateY: scanLineAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0, SCAN_BOX_SIZE - 4],
+                    }),
+                  },
+                ],
+              },
             ]}
-          >
-            <Ionicons
-              name={flash ? "flashlight" : "flashlight-outline"}
-              size={24}
-              color="white"
-            />
-          </TouchableOpacity>
+          />
         </View>
+
+        <View style={{ flex: 1,
+  backgroundColor: "rgba(10, 20, 35, 0.5)",}} />
+      </View>
+      <View style={styles.bottomPanel} />
+      <View style={styles.instruction}>
+        <ThemedText type="text4white">
+          Align QR code within the frame
+        </ThemedText>
+      </View>
+
+      <View style={general.overlay}></View>
+      <View style={styles.bottom}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <View style={[styles.flash, { backgroundColor: Colors.primary }]}>
+            <FontAwesome6 name="xmark" size={20} color="white" />
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => setFlash(!flash)}
+          style={[
+            styles.flash,
+            {
+              backgroundColor: flash
+                ? Colors.primary
+                : "rgba(232, 241, 255,0.2)",
+            },
+          ]}
+        >
+          <Ionicons
+            name={flash ? "flashlight" : "flashlight-outline"}
+            size={24}
+            color="white"
+          />
+        </TouchableOpacity>
       </View>
       <Modal
         visible={textModalVisible}
@@ -307,24 +335,12 @@ const CameraScreen = () => {
 
 export default CameraScreen;
 const styles = StyleSheet.create({
-  overlay: {
-    backgroundColor: "rgba(70, 130, 180, 0.12)",
-    width: SCREEN_WIDTH * 0.18,
-    height: SCREEN_HEIGHT * 0.4,
-  },
-  link: {
-    backgroundColor: Colors.primary,
-    paddingVertical: SCREEN_HEIGHT * 0.02,
-    paddingHorizontal: SCREEN_WIDTH * 0.05,
-    borderRadius: SCREEN_WIDTH * 0.06,
-    alignItems: "center",
-    width: "40%",
-    justifyContent: "center",
-    alignSelf: "center",
-    elevation: 5,
-  },
-  middleRow: {
+   middleRow: {
     flexDirection: "row",
+    position: "absolute",
+    top: "50%",
+    left: 0,
+    right: 0,
   },
   modalContainer: {
     flex: 1,
@@ -373,23 +389,71 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: moderateScale(18),
   },
+  overlayFull: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(10, 20, 35, 0.5)",
+  },
+  viewfinderContainer: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+  },
+  corner: {
+    position: "absolute",
+    width: moderateScale(24),
+    height: moderateScale(24),
+    borderColor: Colors.primary2,
+    borderWidth: 3,
+  },
+  topLeft: {
+    top: 0,
+    left: 0,
+    borderRightWidth: 0,
+    borderBottomWidth: 0,
+    borderTopLeftRadius: moderateScale(6),
+  },
+  topRight: {
+    top: 0,
+    right: 0,
+    borderLeftWidth: 0,
+    borderBottomWidth: 0,
+    borderTopRightRadius: moderateScale(6),
+  },
+  bottomLeft: {
+    bottom: 0,
+    left: 0,
+    borderRightWidth: 0,
+    borderTopWidth: 0,
+    borderBottomLeftRadius: moderateScale(6),
+  },
+  bottomRight: {
+    bottom: 0,
+    right: 0,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    borderBottomRightRadius: moderateScale(6),
+  },
   scanLine: {
     position: "absolute",
-    left: 2,
-    right: 2,
-    height: 5,
-    backgroundColor: "rgba(52, 125, 185, 1)",
+    left: 4,
+    right: 4,
+    height: 2,
+    backgroundColor: Colors.primary,
     borderRadius: 1,
+    shadowColor: Colors.primary,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
   },
   instruction: {
+    padding: Sizes.base,
+    backgroundColor: "rgba(232, 241, 255,0.2)",
     position: "absolute",
-    bottom: moderateScale(10),
-    color: "white",
-    fontSize: moderateScale(13),
-    backgroundColor: "transparent",
-    textAlign: "center",
-    paddingHorizontal: moderateScale(8),
-    opacity: 0.9,
+    bottom: 230,
+    alignSelf: "center",
+    borderRadius: Sizes.navTitle,
+    borderColor: "rgba(232, 241, 255,0.3)",
+    borderWidth: 1,
   },
   flash: {
     borderRadius: moderateScale(30),
@@ -398,19 +462,35 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-   bottom: {
-      position: "absolute",
-      bottom: 20,
-      width: "90%",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      backgroundColor: "rgba(232, 241, 255,0.2)",
-      paddingHorizontal: Sizes.padding,
-      borderRadius: Sizes.padding * 3,
-      alignSelf: "center",
-      borderColor: "rgba(232, 241, 255,0.3)",
-      borderWidth: 1,
-      paddingVertical:Sizes.padding
-    },
+  bottom: {
+    position: "absolute",
+    bottom: 20,
+    width: "90%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "rgba(232, 241, 255,0.2)",
+    paddingHorizontal: Sizes.padding,
+    borderRadius: Sizes.padding * 3,
+    alignSelf: "center",
+    borderColor: "rgba(232, 241, 255,0.3)",
+    borderWidth: 1,
+    paddingVertical: Sizes.padding,
+  },
+  topPanel: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: "34.5%",
+    backgroundColor: "rgba(10, 20, 35, 0.5)",
+  },
+  bottomPanel: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: "34.5%",
+    backgroundColor: "rgba(10, 20, 35, 0.5)",
+  },
 });

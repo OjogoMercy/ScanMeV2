@@ -129,6 +129,7 @@ const ScanForText = () => {
         JSON.stringify({
           pendingBlocks: blocks,
           pendingText: foundText,
+          photoUri: compressedImage.uri,
         }),
       );
       router.push("/Review");
