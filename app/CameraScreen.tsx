@@ -20,7 +20,8 @@ import {
   View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants/theme";
+import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH, Sizes } from "../constants/theme";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const CameraScreen = () => {
   const router = useRouter();
@@ -253,38 +254,24 @@ const CameraScreen = () => {
         </View>
 
         <View style={general.overlay}></View>
-        <View
-          style={{
-            position: "absolute",
-            bottom: 20,
-            width: "100%",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            paddingHorizontal: moderateScale(20),
-            alignItems: "center",
-          }}
-        >
-          <Link href="/">
+           <View style={styles.bottom}>
+          <TouchableOpacity onPress={() => router.back()}>
             <View style={[styles.flash, { backgroundColor: Colors.primary }]}>
-              <FontAwesome6 name={"xmark"} size={28} color="white" />
+              <FontAwesome6 name="xmark" size={20} color="white" />
             </View>
-          </Link>
-          <Link href={"/ScanForText"} asChild>
-            <TouchableOpacity style={styles.link}>
-              <ThemedText type="text4white">Scan For Text</ThemedText>
-            </TouchableOpacity>
-          </Link>
+          </TouchableOpacity>
 
+          
           <TouchableOpacity
             onPress={() => setFlash(!flash)}
             style={[
               styles.flash,
-              { backgroundColor: flash ? "black" : Colors.primary },
+              { backgroundColor: flash ? Colors.primary : "rgba(232, 241, 255,0.2)" },
             ]}
           >
-            <Ionicon
-              name={flash ? "flashlight-outline" : "flashlight"}
-              size={28}
+            <Ionicons
+              name={flash ? "flashlight" : "flashlight-outline"}
+              size={24}
               color="white"
             />
           </TouchableOpacity>
@@ -411,4 +398,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+   bottom: {
+      position: "absolute",
+      bottom: 20,
+      width: "90%",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: "rgba(232, 241, 255,0.2)",
+      paddingHorizontal: Sizes.padding,
+      borderRadius: Sizes.padding * 3,
+      alignSelf: "center",
+      borderColor: "rgba(232, 241, 255,0.3)",
+      borderWidth: 1,
+      paddingVertical:Sizes.padding
+    },
 });

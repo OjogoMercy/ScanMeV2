@@ -104,7 +104,7 @@ export default function Index() {
           const history = await AsyncStorage.getItem("scanHistory");
           if (history) {
             const parsed: ScanItem[] = JSON.parse(history);
-            setRecentScans(parsed.slice(0, 5));
+            setRecentScans(parsed.slice(0, 4));
           }
         } catch (error) {
           console.error("Error loading recent scans:", error);
@@ -163,7 +163,6 @@ export default function Index() {
       <View style={styles.scanCards}>
         <TouchableOpacity
           style={[styles.scanCard, { backgroundColor: Colors.text }]}
-          activeOpacity={0.85}
           onPress={() => router.push("/CameraScreen")}
         >
           <View style={styles.cardIcon}>
@@ -186,7 +185,6 @@ export default function Index() {
 
         <TouchableOpacity
           style={[styles.scanCard, { backgroundColor: Colors.primary }]}
-          activeOpacity={0.85}
           onPress={() => router.push("/ScanForText")}
         >
           <View style={styles.cardIcon}>

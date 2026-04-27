@@ -209,42 +209,42 @@ const ScanForText = () => {
         <View style={general.overlay}></View>
         <View
           style={{
-            padding: Sizes.padding,
-            backgroundColor: "white",
+            padding: Sizes.base,
+            backgroundColor: "rgba(232, 241, 255,0.2)",
             position: "absolute",
-            bottom: 115,
+            bottom: 100,
             alignSelf: "center",
-            borderRadius: Sizes.radius,
+            borderRadius: Sizes.navTitle,
+            borderColor: "rgba(232, 241, 255,0.3)",
+            borderWidth: 1,
           }}
         >
-          <ThemedText>
-            {" "}
-            Works best with printed text. For handwriting, ensure good lighting
-            and hold steady.
+          <ThemedText style={{ color: "white" }}>
+            Works best with printed text.
           </ThemedText>
         </View>
         <View style={styles.bottom}>
           <TouchableOpacity onPress={() => router.back()}>
             <View style={[styles.flash, { backgroundColor: Colors.primary }]}>
-              <FontAwesome6 name="xmark" size={22} color="white" />
+              <FontAwesome6 name="xmark" size={20} color="white" />
             </View>
           </TouchableOpacity>
 
           <CustomButton
             title="Scan"
             onPress={handleCapture}
-            buttonStyle={{ width: SCREEN_WIDTH * 0.35 }}
+            buttonStyle={{ width: SCREEN_WIDTH * 0.35, marginBottom: 10 }}
           />
           <TouchableOpacity
             onPress={() => setFlash(!flash)}
             style={[
               styles.flash,
-              { backgroundColor: flash ? "black" : Colors.primary },
+              { backgroundColor: flash ? Colors.primary : "rgba(232, 241, 255,0.2)" },
             ]}
           >
             <Ionicons
               name={flash ? "flashlight" : "flashlight-outline"}
-              size={28}
+              size={24}
               color="white"
             />
           </TouchableOpacity>
@@ -355,8 +355,8 @@ const styles = StyleSheet.create({
   },
   flash: {
     borderRadius: moderateScale(30),
-    height: moderateScale(50),
-    width: moderateScale(50),
+    height: moderateScale(45),
+    width: moderateScale(45),
     justifyContent: "center",
     alignItems: "center",
   },
@@ -377,11 +377,12 @@ const styles = StyleSheet.create({
     width: "90%",
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: Sizes.base,
     alignItems: "center",
-    backgroundColor: "rgba(247, 239, 239, 0.5)",
+    backgroundColor: "rgba(232, 241, 255,0.2)",
     paddingHorizontal: Sizes.padding,
-    borderRadius: 26,
+    borderRadius: Sizes.padding * 3,
     alignSelf: "center",
+    borderColor: "rgba(232, 241, 255,0.3)",
+    borderWidth: 1,
   },
 });
