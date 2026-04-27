@@ -13,7 +13,7 @@ import {
   View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors, SCREEN_WIDTH, Sizes } from "../constants/theme";
+import { Colors,Sizes,SCREEN_WIDTH,SCREEN_HEIGHT } from "@/constants/theme";
 
 type ScanItem = {
   id: number;
@@ -92,7 +92,7 @@ const formatTime = (timestamp: string) => {
   return `${diffDays} days ago`;
 };
 
-export default function HomeScreen() {
+export default function index() {
   const [recentScans, setRecentScans] = useState<ScanItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -153,7 +153,6 @@ export default function HomeScreen() {
     <View style={[general.container, { backgroundColor: Colors.background }]}>
       <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
 
-      {/* Header */}
       <View style={styles.header}>
         <ThemedText type="text5" style={{ color: Colors.bodyText }}>
           {getGreeting()}
@@ -161,12 +160,11 @@ export default function HomeScreen() {
         <ThemedText type="text1bold">What are you scanning?</ThemedText>
       </View>
 
-      {/* Scan Cards */}
       <View style={styles.scanCards}>
         <TouchableOpacity
           style={[styles.scanCard, { backgroundColor: Colors.text }]}
           activeOpacity={0.85}
-          onPress={() => router.push("/QRScan")}
+          onPress={() => router.push("/CameraScreen")}
         >
           <View style={styles.cardIcon}>
             <MaterialCommunityIcons
