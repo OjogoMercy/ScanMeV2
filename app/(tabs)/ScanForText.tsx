@@ -10,9 +10,7 @@ import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Animated,
   AppState,
-  Easing,
   Modal,
   StyleSheet,
   Text,
@@ -31,7 +29,6 @@ const ScanForText = () => {
   const SCAN_BOX_SIZE = Math.min(SCREEN_WIDTH, SCREEN_HEIGHT) * 0.7;
   const SCAN_BOX_WIDTH = SCREEN_WIDTH * 0.85;
   const SCAN_BOX_HEIGHT = SCREEN_HEIGHT * 0.25;
-  const scanLineAnim = React.useRef(new Animated.Value(0)).current;
   const [flash, setFlash] = useState(false);
   const [textModalVisible, setTextModalVisible] = useState(false);
   const [scanned, setScanned] = useState(false);
@@ -56,24 +53,11 @@ const ScanForText = () => {
     return () => subscription.remove();
   }, []);
 
-  useEffect(() => {
-    scanLineAnim.setValue(0);
-    const loop = Animated.loop(
-      Animated.timing(scanLineAnim, {
-        toValue: 1,
-        duration: 1800,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      }),
-    );
-    loop.start();
-    return () => loop.stop();
-  }, []);
   const remountCamera = () => {
     setCameraKey((prev) => prev + 1);
   };
   const lastInterractionRef = useRef(Date.now());
-
+  ``;
   useEffect(() => {
     const interval = setInterval(() => {
       const timeSinceInteraction = Date.now() - lastInterractionRef.current;
@@ -187,23 +171,7 @@ const ScanForText = () => {
         <View style={general.overlay}></View>
         <View style={styles.middleRow}>
           <View style={styles.overlay} />
-          <View style={general.overlayCam}>
-            <Animated.View
-              style={[
-                styles.scanLine,
-                {
-                  transform: [
-                    {
-                      translateY: scanLineAnim.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [0, SCAN_BOX_HEIGHT - 2],
-                      }),
-                    },
-                  ],
-                },
-              ]}
-            />
-          </View>
+          <View style={general.overlayCam}></View>
           <View style={styles.overlay} />
         </View>
 
@@ -240,7 +208,11 @@ const ScanForText = () => {
             onPress={() => setFlash(!flash)}
             style={[
               styles.flash,
-              { backgroundColor: flash ? Colors.primary : "rgba(232, 241, 255,0.2)" },
+              {
+                backgroundColor: flash
+                  ? Colors.primary
+                  : "rgba(232, 241, 255,0.2)",
+              },
             ]}
           >
             <Ionicons
