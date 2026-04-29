@@ -10,10 +10,11 @@ import {
   StatusBar,
   StyleSheet,
   TouchableOpacity,
-  View,
+  View,Modal
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import { Colors,Sizes,SCREEN_WIDTH,SCREEN_HEIGHT } from "@/constants/theme";
+import { SmartAction } from "@/utils/smartActions";
 
 type ScanItem = {
   id: number;
