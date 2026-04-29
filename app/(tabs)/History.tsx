@@ -43,7 +43,7 @@ const History = () => {
   useFocusEffect(
     React.useCallback(() => {
       loadScanHistory();
-    }, [])
+    }, []),
   );
 
   const loadScanHistory = async () => {
@@ -77,7 +77,7 @@ const History = () => {
 
   const favoriteScan = async (id: number) => {
     const updatedHistory = scanHistory.map((item) =>
-      item.id === id ? { ...item, favorite: !item.favorite } : item
+      item.id === id ? { ...item, favorite: !item.favorite } : item,
     );
     setScanHistory(updatedHistory);
     await AsyncStorage.setItem("scanHistory", JSON.stringify(updatedHistory));
@@ -99,7 +99,7 @@ const History = () => {
       animate={{ translateY: 0, opacity: 1 }}
       transition={{
         type: "timing",
-        duration: 700,
+        duration: 100,
       }}
     >
       {categories.map((cat) => (
@@ -174,73 +174,79 @@ const History = () => {
         { backgroundColor: Colors.background, paddingTop: Sizes.navTitle },
       ]}
     >
-      <StatusBar barStyle="dark-content" translucent={true} backgroundColor={Colors.background} />
+      <StatusBar
+        barStyle="dark-content"
+        translucent={true}
+        backgroundColor={Colors.background}
+      />
       <Text style={styles.title}>Scan History</Text>
       <View>
         <FlatList
           data={filteredData}
           showsVerticalScrollIndicator={false}
           renderItem={({ item, index }) => {
-            const displayTitle = item.title || item.data.substring(0, 30)
-            return(           
-            <MotiView
-              style={styles.historyItem}
-              key={item.id}
-              from={{ opacity: 0, translateY: 100 }}
-              animate={{ opacity: 1, translateY: 0 }}
-              transition={{
-                type: "timing",
-                duration: 1000,
-                delay: index * 100,
-              }}
-            >
-              <View style={styles.itemHeader}>
-                <Text style={styles.typeText}>{item.type.toUpperCase()}</Text>
-                <Text style={styles.dateText}>
-                  {formatDate(item.timestamp)}
+            const displayTitle = item.title || item.data.substring(0, 30);
+            return (
+              <MotiView
+                style={styles.historyItem}
+                key={item.id}
+                from={{ opacity: 0, translateY: 100 }}
+                animate={{ opacity: 1, translateY: 0 }}
+                transition={{
+                  type: "timing",
+                  duration: 1000,
+                  delay: index * 100,
+                }}
+              >
+                <View style={styles.itemHeader}>
+                  <Text style={styles.typeText}>{item.type.toUpperCase()}</Text>
+                  <Text style={styles.dateText}>
+                    {formatDate(item.timestamp)}
+                  </Text>
+                </View>
+                <Text style={styles.dataText} numberOfLines={2}>
+                  {item.data}
                 </Text>
-              </View>
-              <Text style={styles.dataText} numberOfLines={2}>
-                {item.data}
-              </Text>
-              <View style={styles.actions}>
-                {item.type === "url" && (
+                <View style={styles.actions}>
+                  {item.type === "url" && (
+                    <TouchableOpacity
+                      style={styles.actionButton}
+                      onPress={() => Linking.openURL(item.data)}
+                    >
+                      <Text style={styles.actionText}>Open</Text>
+                    </TouchableOpacity>
+                  )}
                   <TouchableOpacity
                     style={styles.actionButton}
-                    onPress={() => Linking.openURL(item.data)}
+                    onPress={() => copyToClipboard(item.data)}
                   >
-                    <Text style={styles.actionText}>Open</Text>
+                    <Text style={styles.actionText}>Copy</Text>
                   </TouchableOpacity>
-                )}
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() => copyToClipboard(item.data)}
-                >
-                  <Text style={styles.actionText}>Copy</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() => favoriteScan(item.id)}
-                >
-                  <Text style={[styles.actionText, { color: Colors.accent }]}>
-                    {item.favorite ? "★" : "☆"}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.actionButton, { backgroundColor: "#ffdbee" }]}
-                  onPress={() => deleteScan(item.id)}
-                >
-                  <Text style={styles.deleteText}>Delete</Text>
-                </TouchableOpacity>
-              </View>
-            </MotiView>
-            )
+                  <TouchableOpacity
+                    style={styles.actionButton}
+                    onPress={() => favoriteScan(item.id)}
+                  >
+                    <Text style={[styles.actionText, { color: Colors.accent }]}>
+                      {item.favorite ? "★" : "☆"}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.actionButton,
+                      { backgroundColor: "#ffdbee" },
+                    ]}
+                    onPress={() => deleteScan(item.id)}
+                  >
+                    <Text style={styles.deleteText}>Delete</Text>
+                  </TouchableOpacity>
+                </View>
+              </MotiView>
+            );
           }}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={
             filteredData.length === 0
               ? {
-                  // flexGrow: 1,
                   justifyContent: "center",
                   alignItems: "center",
                   padding: Sizes.padding,
@@ -265,7 +271,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginVertical: moderateScale(20),
-    marginTop:moderateScale(50)
+    marginTop: moderateScale(50),
   },
   emptyState: {
     flex: 1,
