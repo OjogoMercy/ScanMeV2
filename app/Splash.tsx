@@ -32,7 +32,7 @@ const Splash = () => {
         }}
       >
         <Image
-          source={images.Splash}
+          source={require("../assets/images/mascot.png")}
           style={{ height: "30%", width: "45%", resizeMode: "contain" }}
         />
       </MotiView>

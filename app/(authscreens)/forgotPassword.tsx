@@ -67,7 +67,7 @@ const ForgotPassword = () => {
         Forgot Password
       </Text>
       <Image
-        source={images.emptyScan}
+        source={Images.logo}
         style={{ height: "25%", width: "60%", resizeMode: "contain" }}
       />
       <ThemedText

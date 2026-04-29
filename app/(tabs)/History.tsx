@@ -1,4 +1,4 @@
-import { images } from "@/assets/images";
+import {Images} from "@/constants/Images";
 import general from "@/constants/General";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
