@@ -2,6 +2,7 @@ import * as Clipboard from "expo-clipboard";
 import * as Linking from "expo-linking";
 import * as Haptics from "expo-haptics";
 import { Share } from "react-native";
+import { Colors } from "../constants/theme";
 
 export type SmartAction = {
   label: string;
@@ -11,7 +12,6 @@ export type SmartAction = {
 
 export const getSmartActions = (data: string, type: string): SmartAction[] => {
   const actions: SmartAction[] = [];
-
   actions.push({
     label: "Copy",
     icon: "content-copy",
@@ -22,7 +22,6 @@ export const getSmartActions = (data: string, type: string): SmartAction[] => {
       );
     },
   });
-
   actions.push({
     label: "Share",
     icon: "share-variant",
@@ -32,6 +31,7 @@ export const getSmartActions = (data: string, type: string): SmartAction[] => {
   });
 
   // type specific actions
+
   switch (type) {
     case "url":
       actions.unshift({
@@ -83,6 +83,53 @@ export const getSmartActions = (data: string, type: string): SmartAction[] => {
       });
       break;
   }
+  
 
   return actions;
+};
+ export const getTypeConfig = (type: string) => {
+  switch (type) {
+    case "qr":
+      return {
+        bg: "#E1EEF6",
+        color: Colors.primary,
+        label: "QR",
+        icon: "qrcode",
+      };
+    case "text":
+      return {
+        bg: "#fff3e0",
+        color: "#e65100",
+        label: "Text",
+        icon: "text",
+      };
+    case "url":
+      return {
+        bg: "#e8f5e9",
+        color: "#2e7d32",
+        label: "URL",
+        icon: "link",
+      };
+    case "email":
+      return {
+        bg: "#fce4ec",
+        color: "#c2185b",
+        label: "Email",
+        icon: "email",
+      };
+    case "phone":
+      return {
+        bg: "#f3e5f5",
+        color: "#7b1fa2",
+        label: "Phone",
+        icon: "phone",
+      };
+    default:
+      return {
+        bg: Colors.gray,
+        color: Colors.primary,
+        label: type,
+        icon: "crop-square",
+      };
+  }
 };

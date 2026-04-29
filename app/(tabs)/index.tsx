@@ -1,5 +1,8 @@
+import { QuickActionModal } from "@/components/quickActionModal";
 import general from "@/constants/General";
+import { Colors, SCREEN_WIDTH, Sizes } from "@/constants/theme";
 import { ThemedText } from "@/constants/ThemedText";
+import { getTypeConfig } from "@/utils/smartActions";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect, useRouter } from "expo-router";
@@ -10,12 +13,9 @@ import {
   StatusBar,
   StyleSheet,
   TouchableOpacity,
-  View,Modal
+  View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors,Sizes,SCREEN_WIDTH,SCREEN_HEIGHT } from "@/constants/theme";
-import { SmartAction } from "@/utils/smartActions";
-
 type ScanItem = {
   id: number;
   data: string;
@@ -24,52 +24,52 @@ type ScanItem = {
   favorite: boolean;
 };
 
-const getTypeConfig = (type: string) => {
-  switch (type) {
-    case "qr":
-      return {
-        bg: "#E1EEF6",
-        color: Colors.primary,
-        label: "QR",
-        icon: "qrcode",
-      };
-    case "text":
-      return {
-        bg: "#fff3e0",
-        color: "#e65100",
-        label: "Text",
-        icon: "text",
-      };
-    case "url":
-      return {
-        bg: "#e8f5e9",
-        color: "#2e7d32",
-        label: "URL",
-        icon: "link",
-      };
-    case "email":
-      return {
-        bg: "#fce4ec",
-        color: "#c2185b",
-        label: "Email",
-        icon: "email",
-      };
-    case "phone":
-      return {
-        bg: "#f3e5f5",
-        color: "#7b1fa2",
-        label: "Phone",
-        icon: "phone",
-      };
-    default:
-      return {
-        bg: Colors.gray,
-        color: Colors.primary,
-        label: type,
-        icon: "crop-square",
-      };
-  }
-};
+//
+//   switch (type) {
+//     case "qr":
+//       return {
+//         bg: "#E1EEF6",
+//         color: Colors.primary,
+//         label: "QR",
+//         icon: "qrcode",
+//       };
+//     case "text":
+//       return {
+//         bg: "#fff3e0",
+//         color: "#e65100",
+//         label: "Text",
+//         icon: "text",
+//       };
+//     case "url":
+//       return {
+//         bg: "#e8f5e9",
+//         color: "#2e7d32",
+//         label: "URL",
+//         icon: "link",
+//       };
+//     case "email":
+//       return {
+//         bg: "#fce4ec",
+//         color: "#c2185b",
+//         label: "Email",
+//         icon: "email",
+//       };
+//     case "phone":
+//       return {
+//         bg: "#f3e5f5",
+//         color: "#7b1fa2",
+//         label: "Phone",
+//         icon: "phone",
+//       };
+//     default:
+//       return {
+//         bg: Colors.gray,
+//         color: Colors.primary,
+//         label: type,
+//         icon: "crop-square",
+//       };
+//   }
+// };
 
 const getGreeting = () => {
   const hour = new Date().getHours();
@@ -96,6 +96,8 @@ const formatTime = (timestamp: string) => {
 export default function Index() {
   const [recentScans, setRecentScans] = useState<ScanItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<ScanItem | null>(null);
   const router = useRouter();
 
   useFocusEffect(
@@ -120,7 +122,13 @@ export default function Index() {
   const renderScanItem = ({ item }: { item: ScanItem }) => {
     const config = getTypeConfig(item.type);
     return (
-      <TouchableOpacity style={styles.scanItem} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.scanItem}
+        onPress={() => {
+          setSelectedItem(item);
+          setModalVisible(true);
+        }}
+      >
         <View style={[styles.itemIcon, { backgroundColor: config.bg }]}>
           <MaterialCommunityIcons
             name={config.icon as any}
@@ -151,8 +159,17 @@ export default function Index() {
   };
 
   return (
-    <View style={[general.container, { backgroundColor: Colors.background,alignContent:"stretch" }]}>
-      <StatusBar barStyle="dark-content" backgroundColor="transparent" translucent />
+    <View
+      style={[
+        general.container,
+        { backgroundColor: Colors.background, alignContent: "stretch" },
+      ]}
+    >
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="transparent"
+        translucent
+      />
 
       <View style={styles.header}>
         <ThemedText type="text3" style={{ color: Colors.bodyText }}>
@@ -160,7 +177,6 @@ export default function Index() {
         </ThemedText>
         <ThemedText type="text1bold">What are you scanning?</ThemedText>
       </View>
-
       <View style={styles.scanCards}>
         <TouchableOpacity
           style={[styles.scanCard, { backgroundColor: Colors.text }]}
@@ -243,15 +259,24 @@ export default function Index() {
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderScanItem}
             scrollEnabled={false}
-            ItemSeparatorComponent={() => (
-              <View style={styles.separator} />
-            )}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
           />
         )}
       </View>
-      <TouchableOpacity style={styles.floatingButton} onPress={() => router.push("CameraScreen")}>
-        <Ionicons name="add" size={36} color={'white'}/>
+      <TouchableOpacity
+        style={styles.floatingButton}
+        onPress={() => router.push("CameraScreen")}
+      >
+        <Ionicons name="add" size={36} color={"white"} />
       </TouchableOpacity>
+      <QuickActionModal
+        item={selectedItem}
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        iconColor={selectedItem? getTypeConfig(selectedItem.type).color: Colors.primary}
+        iconBg={selectedItem? getTypeConfig(selectedItem.type).bg: Colors.primary}
+        iconName={selectedItem? getTypeConfig(selectedItem.type).icon: "crop-square"}
+      />
     </View>
   );
 }
@@ -287,11 +312,11 @@ const styles = StyleSheet.create({
   },
   section: {
     backgroundColor: Colors.white,
-   borderRadius:Sizes.padding,
+    borderRadius: Sizes.padding,
     marginHorizontal: Sizes.padding,
     padding: Sizes.padding,
-    width:SCREEN_WIDTH*0.9,
-    marginTop:Sizes.navTitle,
+    width: SCREEN_WIDTH * 0.9,
+    marginTop: Sizes.navTitle,
   },
   sectionHeader: {
     flexDirection: "row",
@@ -332,17 +357,17 @@ const styles = StyleSheet.create({
     gap: moderateScale(12),
     paddingVertical: moderateScale(40),
   },
-  floatingButton:{
-    backgroundColor:Colors.primary,
-    alignSelf:'flex-end',
-    margin:Sizes.padding,
-    width:moderateScale(55),
-    height:moderateScale(55),
-    borderRadius:30,
-    alignItems:'center',
-    justifyContent:'center',
-    elevation:5,
-    position :'absolute',
-    bottom:20
-  }
+  floatingButton: {
+    backgroundColor: Colors.primary,
+    alignSelf: "flex-end",
+    margin: Sizes.padding,
+    width: moderateScale(55),
+    height: moderateScale(55),
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 5,
+    position: "absolute",
+    bottom: 20,
+  },
 });

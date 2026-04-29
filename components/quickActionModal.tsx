@@ -1,26 +1,28 @@
 import { Colors, Sizes } from "../constants/theme";
 import { ThemedText } from "@/constants/ThemedText";
-import { getSmartActions } from "@/utils/smartActions";
+import { getSmartActions, getTypeConfig } from "@/utils/smartActions";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Modal, StyleSheet, TouchableOpacity, View } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import CustomButton from "./CustomButton";
 
+
 type QuickActionModalProps = {
   item: ScanItem | null;
   visible: boolean;
   onClose: () => void;
+  iconColor: string;
+  iconName: string;
+  iconBg: string;
 };
 
-const QuickActionModal = ({
+ export const QuickActionModal = ({
   item,
   visible,
-  onClose,
+  onClose,iconColor,iconName,iconBg
 }: QuickActionModalProps) => {
   if (!item) return null;
-  const config = getTypeConfig(item.type);
   const actions = getSmartActions(item.data, item.type);
-
   return (
     <Modal
       visible={visible}
@@ -36,11 +38,11 @@ const QuickActionModal = ({
         <View style={styles.modalSheet}>
           <View style={styles.modalHandle} />
           <View style={styles.modalHeader}>
-            <View style={[styles.modalIcon, { backgroundColor: config.bg }]}>
+            <View style={[styles.modalIcon, { backgroundColor: iconBg }]}>
               <MaterialCommunityIcons
-                name={config.icon as any}
+                name={iconName}
                 size={moderateScale(22)}
-                color={config.color}
+                color={iconColor}
               />
             </View>
             <View style={{ flex: 1 }}>
@@ -63,8 +65,9 @@ const QuickActionModal = ({
               style={styles.actionRow}
               activeOpacity={0.7}
               onPress={async () => {
-                onClose();
                 await action.action();
+                onClose();
+
               }}
             >
               <MaterialCommunityIcons

@@ -7,21 +7,22 @@ import React, { useEffect, useState } from "react";
 
 import {
   ActivityIndicator,
+  Image,
   ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  View,Image
+  View,
 } from "react-native";
 import { moderateScale } from "react-native-size-matters";
-import { Colors, SCREEN_WIDTH, Sizes } from "../constants/theme";
+import { Colors, SCREEN_HEIGHT, Sizes } from "../constants/theme";
 
 const Review = () => {
- const [extractedText, setExtractedText] = useState("")
-const [scanTitle, setScanTitle] = useState("")
-const [pendingUri, setPendingUri] = useState<string | null>(null)
-const [error, setError] = useState(false)
-const [isLoading, setIsLoading] = useState(true)
+  const [extractedText, setExtractedText] = useState("");
+  const [scanTitle, setScanTitle] = useState("");
+  const [pendingUri, setPendingUri] = useState<string | null>(null);
+  const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const cleanText = (raw: string) => {
     return raw
@@ -31,30 +32,30 @@ const [isLoading, setIsLoading] = useState(true)
       .map((line) => line.replace(/\s+/g, " "))
       .join("\n");
   };
- const loadResult = async () => {
-  try {
-    const pending = await AsyncStorage.getItem("pendingResult")
-    if (!pending) {
-      setError(true)
-      return
+  const loadResult = async () => {
+    try {
+      const pending = await AsyncStorage.getItem("pendingResult");
+      if (!pending) {
+        setError(true);
+        return;
+      }
+      const parsed = JSON.parse(pending);
+      if (parsed && parsed.pendingText) {
+        const processedText = cleanText(parsed.pendingText);
+        setExtractedText(processedText);
+        const firstLine = processedText.split("\n")[0].substring(0, 40);
+        setScanTitle(firstLine);
+      }
+      if (parsed?.pendingUri) {
+        setPendingUri(parsed.pendingUri);
+      }
+    } catch (error) {
+      console.error("Error loading result:", error);
+      setError(true);
+    } finally {
+      setIsLoading(false);
     }
-    const parsed = JSON.parse(pending)
-    if (parsed && parsed.pendingText) {
-      const processedText = cleanText(parsed.pendingText)
-      setExtractedText(processedText)
-      const firstLine = processedText.split("\n")[0].substring(0, 40)
-      setScanTitle(firstLine)
-    }
-    if (parsed?.pendingUri) {
-      setPendingUri(parsed.pendingUri)
-    }
-  } catch (error) {
-    console.error("Error loading result:", error)
-    setError(true)
-  } finally {
-    setIsLoading(false)
-  }
-}
+  };
 
   useEffect(() => {
     loadResult();
@@ -62,124 +63,132 @@ const [isLoading, setIsLoading] = useState(true)
   const clearPending = async () => {
     await AsyncStorage.removeItem("pendingResult");
   };
- const handleSave = async () => {
-  try {
-    const newSave = {
-      id: Date.now(),
-      data: extractedText,
-      type: "text",
-      timestamp: new Date().toISOString(),
-      favorite: false,
-      title: scanTitle || extractedText.substring(0, 40),
-      uri: pendingUri,
+  const handleSave = async () => {
+    try {
+      const newSave = {
+        id: Date.now(),
+        data: extractedText,
+        type: "text",
+        timestamp: new Date().toISOString(),
+        favorite: false,
+        title: scanTitle || extractedText.substring(0, 40),
+        uri: pendingUri,
+      };
+      const existingHistory = await AsyncStorage.getItem("scanHistory");
+      const history = existingHistory ? JSON.parse(existingHistory) : [];
+      const updatedHistory = [newSave, ...history.slice(0, 49)];
+      await AsyncStorage.setItem("scanHistory", JSON.stringify(updatedHistory));
+      await clearPending();
+      router.push("/History");
+    } catch (error) {
+      console.error("Error saving:", error);
     }
-    const existingHistory = await AsyncStorage.getItem("scanHistory")
-    const history = existingHistory ? JSON.parse(existingHistory) : []
-    const updatedHistory = [newSave, ...history.slice(0, 49)]
-    await AsyncStorage.setItem("scanHistory", JSON.stringify(updatedHistory))
-    await clearPending()
-   router.push("/History")
-  } catch (error) {
-    console.error("Error saving:", error)
-  }
-}
-if (isLoading) return (
-  <View style={styles.centered}>
-    <ActivityIndicator size="large" color={Colors.primary} />
-  </View>
-)
+  };
+  if (isLoading)
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
 
-if (error) return (
-  <View style={styles.centered}>
-    <ThemedText type="text3bold" style={{ color: Colors.primary }}>
-      Could not load scanned text. Please try again.
-    </ThemedText>
-    <CustomButton title="Go Back" onPress={() => router.back()} />
-  </View>
-)
+  if (error)
+    return (
+      <View style={styles.centered}>
+        <ThemedText type="text3bold" style={{ color: Colors.primary }}>
+          Could not load scanned text. Please try again.
+        </ThemedText>
+        <CustomButton title="Go Back" onPress={() => router.back()} />
+      </View>
+    );
 
-return (
-  <View style={styles.container}>
-    
-    <View style={styles.header}>
-      <TouchableOpacity onPress={async () => {
-        await clearPending()
-        router.back()
-      }}>
-        <Ionicons name="arrow-back" size={24} color={Colors.primary} />
-      </TouchableOpacity>
-      <ThemedText type="text2bold">Review Scan</ThemedText>
-      <View style={{ width: 24 }} />
-    </View>
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={async () => {
+            await clearPending();
+            router.back();
+          }}
+        >
+          <Ionicons name="arrow-back" size={24} color={Colors.primary} />
+        </TouchableOpacity>
+        <ThemedText type="text2bold">Review Scan</ThemedText>
+        <View style={{ width: 24 }} />
+      </View>
 
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.scrollContent}
-    >
-      {pendingUri && (
-        <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: pendingUri }}
-            style={styles.previewImage}
-            resizeMode="cover"
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {pendingUri && (
+          <View style={styles.imageContainer}>
+            <Image
+              source={{ uri: pendingUri }}
+              style={styles.previewImage}
+              resizeMode="cover"
+            />
+          </View>
+        )}
+
+        <View style={styles.card}>
+          <ThemedText type="text4" style={styles.cardLabel}>
+            Scanned Text Content
+          </ThemedText>
+          <ScrollView nestedScrollEnabled={true} showsVerticalScrollIndicator={false} style={{maxHeight:SCREEN_HEIGHT*0.5}}>
+            <TextInput
+              value={extractedText}
+              onChangeText={setExtractedText}
+              multiline={true}
+              style={styles.textInput}
+              textAlignVertical="top"
+              placeholder="Scanned text will appear here..."
+              placeholderTextColor={Colors.placeholder}
+              disableFullscreenUI={true}
+              enablesReturnKeyAutomatically={true}
+              importantForAutofill="no"
+            />
+          </ScrollView>
+
+          <ThemedText type="text6" style={styles.charCount}>
+            {extractedText.length} characters
+          </ThemedText>
+        </View>
+
+        <View style={styles.card}>
+          <ThemedText type="text4" style={styles.cardLabel}>
+            Scan Title
+          </ThemedText>
+          <TextInput
+            value={scanTitle}
+            onChangeText={setScanTitle}
+            style={styles.titleInput}
+            placeholder="Enter a title for this scan..."
+            placeholderTextColor={Colors.placeholder}
+            maxLength={60}
           />
         </View>
-      )}
 
-      <View style={styles.card}>
-        <ThemedText type="text4" style={styles.cardLabel}>
-          Scanned Text Content
-        </ThemedText>
-        <TextInput
-          value={extractedText}
-          onChangeText={setExtractedText}
-          multiline
-          style={styles.textInput}
-          textAlignVertical="top"
-          placeholder="Scanned text will appear here..."
-          placeholderTextColor={Colors.placeholder}
+        <CustomButton
+          title="Save Scan"
+          onPress={handleSave}
+          buttonStyle={styles.saveButton}
         />
-        <ThemedText type="text6" style={styles.charCount}>
-          {extractedText.length} characters
-        </ThemedText>
-      </View>
 
-      <View style={styles.card}>
-        <ThemedText type="text4" style={styles.cardLabel}>
-          Scan Title
-        </ThemedText>
-        <TextInput
-          value={scanTitle}
-          onChangeText={setScanTitle}
-          style={styles.titleInput}
-          placeholder="Enter a title for this scan..."
-          placeholderTextColor={Colors.placeholder}
-          maxLength={60}
-        />
-      </View>
-
-      <CustomButton
-        title="Save Scan"
-        onPress={handleSave}
-        buttonStyle={styles.saveButton}
-      />
-
-      <TouchableOpacity
-        style={styles.retakeButton}
-        onPress={async () => {
-          await clearPending()
-          router.back()
-        }}
-      >
-        <Ionicons name="camera-outline" size={18} color={Colors.primary} />
-        <ThemedText type="text4bold" style={{ color: Colors.primary }}>
-          Retake
-        </ThemedText>
-      </TouchableOpacity>
-
-    </ScrollView>
-  </View>
-)
+        <TouchableOpacity
+          style={styles.retakeButton}
+          onPress={async () => {
+            await clearPending();
+            router.back();
+          }}
+        >
+          <Ionicons name="camera-outline" size={18} color={Colors.primary} />
+          <ThemedText type="text4bold" style={{ color: Colors.primary }}>
+            Retake
+          </ThemedText>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
+  );
 };
 
 export default Review;
@@ -259,4 +268,4 @@ const styles = StyleSheet.create({
     gap: moderateScale(6),
     paddingVertical: moderateScale(12),
   },
-})
+});
