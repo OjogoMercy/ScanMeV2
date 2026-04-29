@@ -15,7 +15,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { images } from "../../assets/images";
+import { Images } from "@/constants/Images";
 import { Colors, FONTS, Sizes } from "../../constants/theme";
 
 const LoginScreen = () => {
@@ -73,7 +73,7 @@ const LoginScreen = () => {
         Sign In
       </Text>
       <Image
-        source={images.Splash}
+        source={Images.splash}
         style={{ height: "25%", width: "60%", resizeMode: "contain" }}
       />
 

@@ -22,4 +22,5 @@ export const Images = {
   onBoarding1: require("../assets/images/onBoarding1.png"),
   onBoarding2: require("../assets/images/onBoarding2.png"),
   onBoarding3: require("../assets/images/onBoarding3.png"),
+     splash: require("../assets/images/splash.png"),
 };

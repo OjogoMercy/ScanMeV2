@@ -1,4 +1,3 @@
-import { images } from "@/assets/images";
 import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
 import general from "@/constants/General";
@@ -7,6 +6,7 @@ import { auth } from "@/firebaseConfig";
 import { router } from "expo-router";
 import { sendPasswordResetEmail } from "firebase/auth";
 import React from "react";
+import { Images } from "@/constants/Images";
 import {
   Alert,
   Image,

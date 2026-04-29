@@ -7,7 +7,6 @@ import { Images } from "@/constants/Images";
 import {
   Animated,
   Image,
-  ImageBackground,
   LayoutAnimation,
   StatusBar,
   StyleSheet,
@@ -21,9 +20,7 @@ import CustomButton from "@/components/CustomButton";
 
 const Onboarding1 = () => {
   const router = useRouter();
-  const [currentIndex, setCurrentIndex] = React.useState(0);
-
-  
+  const [currentIndex, setCurrentIndex] = React.useState(0);  
 const SLIDES = [
   {
     id: "1",
@@ -39,8 +36,8 @@ const SLIDES = [
   },
   {
     id: "3",
-    title: "Your History Organized"
-    description:"All your scans are automatically tagged, timestamped and stored in a searchable local history ",
+    title: "Your History Organized",
+    description:"All your scans are automatically tagged, timestamped and stored in a searchable local history",
     image: Images.onBoarding3,
   },
 
@@ -215,7 +212,7 @@ const styles = StyleSheet.create({
     paddingVertical: Sizes.base * 0.8,
     paddingHorizontal: Sizes.base * 1.5,
     borderRadius: Sizes.padding * 2,
-    backgroundColor: Colors.veryLightGray,
+    backgroundColor: Colors.lightGray,
     position: "absolute",
     top: 30,
     right: -30,
@@ -226,7 +223,7 @@ const styles = StyleSheet.create({
   },
   skipTopText: {
     ...FONTS.h4,
-    color: Colors.gray2,
+    color: Colors.lightGray,
     marginLeft: -Sizes.base,
   },
 
@@ -237,8 +234,8 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH,
   },
   imagePlaceholder: {
-    width: width * 0.85,
-    height: height * 0.42,
+    width: SCREEN_WIDTH * 0.85,
+    height: SCREEN_HEIGHT * 0.42,
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
@@ -306,15 +303,15 @@ const styles = StyleSheet.create({
     width: "45%",
   },
   backBtnDisabled: {
-    borderColor: Colors.gray3,
+    borderColor: Colors.lightGray,
     width: "45%",
   },
   backBtnText: {
     ...FONTS.h4bold,
-    color: Colors.gray2,
+    color: Colors.gray,
   },
   backBtnTextDisabled: {
-    color: Colors.gray3,
+    color: Colors.lightGray,
   },
   nextBtn: {
     flex: 1,
