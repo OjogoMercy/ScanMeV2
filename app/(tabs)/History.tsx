@@ -6,6 +6,7 @@ import * as Clipboard from "expo-clipboard";
 import { MotiView } from "moti";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   FlatList,
   Image,
@@ -135,10 +136,7 @@ const History = () => {
             }}
             source={require("../../assets/images/emptyScan.png")}
           />
-          <Text style={{ ...FONTS.h3, fontWeight: "bold" }}>No Scans Yet!</Text>
-          <Text style={styles.emptySubtext}>
-            Scan some QR codes to see them here!
-          </Text>
+         <ActivityIndicator color={Colors.primary}  size="large" animating={true}/>
         </View>
       );
     }
@@ -152,10 +150,10 @@ const History = () => {
               width: SCREEN_WIDTH * 0.8,
               resizeMode: "contain",
             }}
-            source={images.emptyScan}
+           source={require("../../assets/images/emptyScan.png")}
           />
           <Text style={{ ...FONTS.h3, fontWeight: "bold" }}>
-            No {activeFilter.toLowerCase()} Scans Found
+            Loading {activeFilter.toLowerCase()} Scans 
           </Text>
           <Text style={styles.emptySubtext}>
             Try changing your category filter or scanning a new item.
@@ -166,7 +164,6 @@ const History = () => {
 
     return null;
   };
-
   return (
     <View
       style={[

@@ -1,9 +1,15 @@
-import general from "@/constants/General";
-import { Colors, FONTS, Sizes,SCREEN_WIDTH,SCREEN_HEIGHT } from "@/constants/theme";
-import Ionicon from "@expo/vector-icons/Ionicons";
-import { Link, useRouter } from "expo-router";
-import React from "react";
+import CustomButton from "@/components/CustomButton";
 import { Images } from "@/constants/Images";
+import {
+  Colors,
+  FONTS,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  Sizes,
+} from "@/constants/theme";
+import { ThemedText } from "@/constants/ThemedText";
+import { useRouter } from "expo-router";
+import React from "react";
 import {
   Animated,
   Image,
@@ -14,37 +20,37 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { ThemedText } from "@/constants/ThemedText";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CustomButton from "@/components/CustomButton";
 
 const Onboarding1 = () => {
   const router = useRouter();
-  const [currentIndex, setCurrentIndex] = React.useState(0);  
-const SLIDES = [
-  {
-    id: "1",
-    title:"Scan Everything Easily",
-    description:"Point your camera at QRcodes, barcodes or text and let ScanMe do the rest",
-    image: Images.onBoarding1,
-  },
-  {
-    id: "2",
-    title:"Extract Text With OCR",
-    description:"Capture printed text from any surface, edit it and save instantly, no more manual typing",
-    image: Images.onBoarding2,
-  },
-  {
-    id: "3",
-    title: "Your History Organized",
-    description:"All your scans are automatically tagged, timestamped and stored in a searchable local history",
-    image: Images.onBoarding3,
-  },
-
-];
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+  const SLIDES = [
+    {
+      id: "1",
+      title: "Scan Everything Easily",
+      description:
+        "Point your camera at QRcodes, barcodes or text and let ScanMe do the rest",
+      image: Images.onBoarding1,
+    },
+    {
+      id: "2",
+      title: "Extract Text With OCR",
+      description:
+        "Capture printed text from any surface, edit it and save instantly, no more manual typing",
+      image: Images.onBoarding2,
+    },
+    {
+      id: "3",
+      title: "Your History Organized",
+      description:
+        "All your scans are automatically tagged, timestamped and stored in a searchable local history",
+      image: Images.onBoarding3,
+    },
+  ];
 
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
-    const changeSlide = (newIndex: number) => {
+  const changeSlide = (newIndex: number) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     Animated.timing(fadeAnim, {
       toValue: 0,
@@ -64,44 +70,38 @@ const SLIDES = [
     if (currentIndex < SLIDES.length - 1) {
       changeSlide(currentIndex + 1);
     } else {
-      router.replace("/index");
+      router.replace("/Index");
     }
   };
 
   const handleBackBtn = () => {
     if (currentIndex > 0) changeSlide(currentIndex - 1);
   };
-
   const handleSkipBtn = () => router.replace("/index");
 
   const currentSlide = SLIDES[currentIndex];
   const isLastSlide = currentIndex === SLIDES.length - 1;
   const isFirstSlide = currentIndex === 0;
   const Dot = ({ isActive }: { isActive: boolean }) => (
-  <View
-    style={[
-      styles.dot,
-      {
-        width: isActive ? 28 : 7,
-        backgroundColor: isActive ? Colors.primary : Colors.gray,
-        borderColor: isActive ? Colors.primary : Colors.gray,
-      },
-    ]}
-  />
-);
+    <View
+      style={[
+        styles.dot,
+        {
+          width: isActive ? 28 : 7,
+          backgroundColor: isActive ? Colors.primary : Colors.placeholder,
+          borderColor: isActive ? Colors.primary : Colors.placeholder,
+        },
+      ]}
+    />
+  );
   return (
- <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar
         backgroundColor={Colors.primary2}
-        barStyle="light-content"
+        barStyle="dark-content"
         translucent
       />
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleSkipBtn} style={styles.skipTopButton}>
-          <Text style={styles.skipTopText}>Skip</Text>
-        </TouchableOpacity>
-      </View>
-
+    
       <View style={styles.contentContainer}>
         <Animated.View
           style={{
@@ -118,76 +118,33 @@ const SLIDES = [
             ],
           }}
         >
-            <Image
-              source={currentSlide.image}
-              style={styles.image}
-              resizeMode="contain"
-            />
-
+          <Image
+            source={currentSlide.image}
+            style={styles.image}
+            resizeMode="contain"
+          />
           <View style={styles.textContainer}>
-            <Text style={styles.slideTitle}>
-              {currentSlide.highlight ? (
-                <>
-                  <Text style={styles.slideTitleNormal}>
-                    {currentSlide.title[0]}
-                  </Text>
-                  <Text style={styles.slideTitleHighlight}>
-                    {currentSlide.title[1]}
-                  </Text>
-                </>
-              ) : (
-                <Text style={styles.slideTitleNormal}>
-                  {currentSlide.title[0]}
-                  {currentSlide.title[1]}
-                </Text>
-              )}
-            </Text>
-
-            <ThemedText type="text4gray" style={styles.slideDescription}>
+            <ThemedText style={{textAlign:'center'}} type="text1bold"> {currentSlide.title}</ThemedText>
+            <ThemedText style={{textAlign:'center',color:Colors.secondaryText}} type="text4" >
               {currentSlide.description}
             </ThemedText>
-          </View>
+          </View>    
         </Animated.View>
-      </View>
-
-      <View style={styles.paginationContainer}>
+         <View style={styles.paginationContainer}>
         {SLIDES.map((_, i) => (
           <Dot key={i} isActive={i === currentIndex} />
         ))}
       </View>
-
-      <View style={styles.footer}>
-        <TouchableOpacity
-          style={[styles.backBtn, isFirstSlide && styles.backBtnDisabled]}
-          onPress={handleBackBtn}
-          disabled={isFirstSlide}
-          activeOpacity={0.7}
-        >
-          <Text
-            style={[
-              styles.backBtnText,
-              isFirstSlide && styles.backBtnTextDisabled,
-            ]}
-          >
-            Back
-          </Text>
-        </TouchableOpacity>
-
-        <View style={{ flex: 1 }}>
-          <CustomButton
-            title={isLastSlide ? "Create Account" : "Next"}
-            onPress={handleNextBtn}
-          />
-        </View>
       </View>
 
-      <View style={styles.legalContainer}>
-        <Text style={styles.legalText}>
-          Paylinc is licensed by the{" "}
-          <Text style={styles.legalLink}>Central Bank of Nigeria</Text>. All
-          transactions are insured by <Text style={styles.legalLink}>NDIC</Text>
-          .
-        </Text>
+      <View style={styles.footer}>
+        <View style={{ flex: 1 ,width:'100%',marginBottom:Sizes.padding}}>
+          <CustomButton
+            title={isLastSlide ? "Get Started" : "Next"}
+            onPress={handleNextBtn}
+            buttonStyle={{width:'100%'}}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -198,51 +155,19 @@ export default Onboarding1;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primary2,
+    backgroundColor: Colors.background,
     width: SCREEN_WIDTH,
   },
-
-  header: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingHorizontal: Sizes.padding,
-    paddingTop: Sizes.base,
-  },
-  skipTopButton: {
-    paddingVertical: Sizes.base * 0.8,
-    paddingHorizontal: Sizes.base * 1.5,
-    borderRadius: Sizes.padding * 2,
-    backgroundColor: Colors.lightGray,
-    position: "absolute",
-    top: 30,
-    right: -30,
-    width: Sizes.padding * 4,
-    height: Sizes.padding * 4,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  skipTopText: {
-    ...FONTS.h4,
-    color: Colors.lightGray,
-    marginLeft: -Sizes.base,
-  },
-
   contentContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     width: SCREEN_WIDTH,
   },
-  imagePlaceholder: {
-    width: SCREEN_WIDTH * 0.85,
-    height: SCREEN_HEIGHT * 0.42,
-    justifyContent: "center",
-    alignItems: "center",
-    overflow: "hidden",
-  },
+  
   image: {
-    width: "60%",
-    height: "60%",
+    width: "90%",
+    height:SCREEN_HEIGHT*0.5,
     resizeMode: "contain",
   },
 
@@ -251,30 +176,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: Sizes.padding,
     marginTop: Sizes.base,
   },
-  slideTitle: {
-    textAlign: "center",
-    marginBottom: Sizes.base,
-  },
-  slideTitleNormal: {
-    ...FONTS.h2bold,
-    color: Colors.white,
-  },
-  slideTitleHighlight: {
-    ...FONTS.h2bold,
-    color: Colors.primary,
-  },
-  slideDescription: {
-    ...FONTS.h4,
-    color: Colors.gray,
-    textAlign: "center",
-    marginTop: Sizes.base * 0.5,
-  },
+
 
   paginationContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: Sizes.base * 2,
+    marginVertical: Sizes.padding * 2,
     gap: 4,
   },
   dot: {
@@ -315,21 +223,5 @@ const styles = StyleSheet.create({
   },
   nextBtn: {
     flex: 1,
-  },
-
-  legalContainer: {
-    paddingHorizontal: Sizes.padding,
-    paddingBottom: Sizes.base * 1.5,
-    alignItems: "center",
-  },
-  legalText: {
-    ...FONTS.h6,
-    color: Colors.gray,
-    textAlign: "center",
-    lineHeight: 16,
-  },
-  legalLink: {
-    ...FONTS.h6,
-    color: Colors.primary,
   },
 });
